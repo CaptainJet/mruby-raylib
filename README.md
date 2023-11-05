@@ -41,6 +41,29 @@ Enums are read from the raylib_api.json file and recreated in mruby_raylib.rb by
 
 It's not great. But it works for me, and I understand it. If you'd like to help, please edit files inside c-files, not the single file in src.
 
+## Raylib Binaries
+
+There's a pre-built raylib included for various platforms. They were built with all options in config.h enabled, besides the following:
+```
+SUPPORT_TRACELOG_DEBUG
+RLGL_SHOW_GL_DETAILS_INFO
+RLGL_ENABLE_OPENGL_DEBUG_CONTEXT
+SUPPORT_CUSTOM_FRAME_CONTROL
+SUPPORT_BUSY_WAIT_LOOP
+```
+
+and compiled with the following commands on Arch Linux:
+
+```Ruby
+make # Linux
+emmake make PLATFORM=PLATFORM_WEB # WebAssembly
+make CC=x86_64-w64-mingw32-gcc PLATFORM=PLATFORM_DESKTOP PLATFORM_OS=WINDOWS # Windows
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm64 # Android aarch64
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm # Android armv7a
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86_64 # Android X86_64
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86 # Android i686
+```
+
 ## Notes
 
 The Following Raylib methods are currently not bound:
