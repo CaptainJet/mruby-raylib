@@ -34,6 +34,13 @@ After that, you should be able to just use Raylib::MOUSE_LEFT_BUTTON.
 
 Also includes a module Raylib::Colors that includes a pre-built color for every color [here](https://www.w3.org/wiki/CSS/Properties/color/keywords).
 
+## Structure
+
+All the files are located in the c-files directory. I just run single_file.rb to combine structs.c and all the *.c files, besides holder.c, into one file placed in src/mruby_raylib.c
+Enums are read from the raylib_api.json file and recreated in mruby_raylib.rb by the read_json.rb
+
+It's not great. But it works for me, and I understand it. If you'd like to help, please edit files inside c-files, not the single file in src.
+
 ## Notes
 
 The Following Raylib methods are currently not bound:
