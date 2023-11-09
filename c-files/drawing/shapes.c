@@ -81,68 +81,6 @@ mrb_value mrb_draw_line_bezier(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
-// DrawLineBezierQuad
-mrb_value mrb_draw_line_bezier_quad(mrb_state *mrb, mrb_value self)
-{
-    Vector2 *startpos;
-    Vector2 *endpos;
-    Vector2 *controlpos;
-    mrb_float thick;
-    Color *color;
-    mrb_get_args(mrb, "dddfd", &startpos, &Raylib_Vector2_type, &endpos, &Raylib_Vector2_type, &controlpos, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
-    DrawLineBezierQuad(*startpos, *endpos, *controlpos, thick, *color);
-    return mrb_nil_value();
-}
-
-// DrawLineBezierCubic
-mrb_value mrb_draw_line_bezier_cubic(mrb_state *mrb, mrb_value self)
-{
-    Vector2 *startpos;
-    Vector2 *endpos;
-    Vector2 *startcontrolpos;
-    Vector2 *endcontrolpos;
-    mrb_float thick;
-    Color *color;
-    mrb_get_args(mrb, "ddddfd", &startpos, &Raylib_Vector2_type, &endpos, &Raylib_Vector2_type,
-                 &startcontrolpos, &Raylib_Vector2_type, &endcontrolpos, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
-    DrawLineBezierCubic(*startpos, *endpos, *startcontrolpos, *endcontrolpos, thick, *color);
-    return mrb_nil_value();
-}
-
-// DrawLineBSpline
-mrb_value mrb_draw_line_b_spline(mrb_state *mrb, mrb_value self)
-{
-    mrb_value points;
-    mrb_int pointcount;
-    mrb_float thick;
-    Color *color;
-    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
-    Vector2 vector_points[pointcount];
-    for (int i = 0; i < pointcount; ++i)
-    {
-        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
-    }
-    DrawLineBSpline(vector_points, pointcount, thick, *color);
-    return mrb_nil_value();
-}
-
-// DrawLineCatmullRom
-mrb_value mrb_draw_line_catmull_rom(mrb_state *mrb, mrb_value self)
-{
-    mrb_value points;
-    mrb_int pointcount;
-    mrb_float thick;
-    Color *color;
-    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
-    Vector2 vector_points[pointcount];
-    for (int i = 0; i < pointcount; ++i)
-    {
-        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
-    }
-    DrawLineCatmullRom(vector_points, pointcount, thick, *color);
-    return mrb_nil_value();
-}
-
 // DrawLineStrip
 mrb_value mrb_draw_line_strip(mrb_state *mrb, mrb_value self)
 {
@@ -534,6 +472,235 @@ mrb_value mrb_draw_poly_lines_ex(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
+// DrawSplineLinear
+mrb_value mrb_draw_spline_linear(mrb_state *mrb, mrb_value self)
+{
+    mrb_value points;
+    mrb_int pointcount;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
+    Vector2 vector_points[pointcount];
+    for (int i = 0; i < pointcount; ++i)
+    {
+        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
+    }
+    DrawSplineLinear(vector_points, pointcount, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineBasis
+mrb_value mrb_draw_spline_basis(mrb_state *mrb, mrb_value self)
+{
+    mrb_value points;
+    mrb_int pointcount;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
+    Vector2 vector_points[pointcount];
+    for (int i = 0; i < pointcount; ++i)
+    {
+        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
+    }
+    DrawSplineBasis(vector_points, pointcount, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineCatmullRom
+mrb_value mrb_draw_spline_catmull_rom(mrb_state *mrb, mrb_value self)
+{
+    mrb_value points;
+    mrb_int pointcount;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
+    Vector2 vector_points[pointcount];
+    for (int i = 0; i < pointcount; ++i)
+    {
+        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
+    }
+    DrawSplineCatmullRom(vector_points, pointcount, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineBezierQuadratic
+mrb_value mrb_draw_spline_bezier_quadratic(mrb_state *mrb, mrb_value self)
+{
+    mrb_value points;
+    mrb_int pointcount;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
+    Vector2 vector_points[pointcount];
+    for (int i = 0; i < pointcount; ++i)
+    {
+        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
+    }
+    DrawSplineBezierQuadratic(vector_points, pointcount, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineBezierCubic
+mrb_value mrb_draw_spline_bezier_cubic(mrb_state *mrb, mrb_value self)
+{
+    mrb_value points;
+    mrb_int pointcount;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "Aifd", &points, &pointcount, &thick, &color, &Raylib_Color_type);
+    Vector2 vector_points[pointcount];
+    for (int i = 0; i < pointcount; ++i)
+    {
+        vector_points[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(points, i), &Raylib_Vector2_type, Vector2);
+    }
+    DrawSplineBezierCubic(vector_points, pointcount, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineSegmentLinear
+mrb_value mrb_draw_spline_segment_linear(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *p2;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "ddfd", &p1, &Raylib_Vector2_type, &p2, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
+    DrawSplineSegmentLinear(*p1, *p2, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineSegmentBasis
+mrb_value mrb_draw_spline_segment_basis(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *p2;
+    Vector2 *p3;
+    Vector2 *p4;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "ddddfd", &p1, &Raylib_Vector2_type, &p2, &Raylib_Vector2_type, &p3, &Raylib_Vector2_type, &p4, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
+    DrawSplineSegmentBasis(*p1, *p2, *p3, *p4, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineSegmentCatmullRom
+mrb_value mrb_draw_spline_segment_catmull_rom(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *p2;
+    Vector2 *p3;
+    Vector2 *p4;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "ddddfd", &p1, &Raylib_Vector2_type, &p2, &Raylib_Vector2_type, &p3, &Raylib_Vector2_type, &p4, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
+    DrawSplineSegmentCatmullRom(*p1, *p2, *p3, *p4, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineSegmentBezierQuadratic
+mrb_value mrb_draw_spline_segment_bezier_quadratic(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *c2;
+    Vector2 *p3;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "dddfd", &p1, &Raylib_Vector2_type, &c2, &Raylib_Vector2_type, &p3, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
+    DrawSplineSegmentBezierQuadratic(*p1, *c2, *p3, thick, *color);
+    return mrb_nil_value();
+}
+
+// DrawSplineSegmentBezierCubic
+mrb_value mrb_draw_spline_segment_bezier_cubic(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *c2;
+    Vector2 *c3;
+    Vector2 *p4;
+    mrb_float thick;
+    Color *color;
+    mrb_get_args(mrb, "ddddfd", &p1, &Raylib_Vector2_type, &c2, &Raylib_Vector2_type, &c3, &Raylib_Vector2_type, &p4, &Raylib_Vector2_type, &thick, &color, &Raylib_Color_type);
+    DrawSplineSegmentBezierCubic(*p1, *c2, *c3, *p4, thick, *color);
+    return mrb_nil_value();
+}
+
+// GetSplinePointLinear
+mrb_value mrb_get_spline_point_linear(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *start;
+    Vector2 *end;
+    mrb_float t;
+    mrb_get_args(mrb, "ddf", &start, &Raylib_Vector2_type, &end, &Raylib_Vector2_type, &t);
+    Vector2 *vector = (Vector2 *)malloc(sizeof(Vector2));
+    *vector = GetSplinePointLinear(*start, *end, t);
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, vector));
+
+    return obj;
+}
+
+// GetSplinePointBasis
+mrb_value mrb_get_spline_point_basis(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *p2;
+    Vector2 *p3;
+    Vector2 *p4;
+    mrb_float t;
+    mrb_get_args(mrb, "ddddf", &p1, &Raylib_Vector2_type, &p2, &Raylib_Vector2_type, &p3, &Raylib_Vector2_type, &p4, &Raylib_Vector2_type, &t);
+    Vector2 *vector = (Vector2 *)malloc(sizeof(Vector2));
+    *vector = GetSplinePointBasis(*p1, *p2, *p3, *p4, t);
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, vector));
+
+    return obj;
+}
+
+// GetSplinePointCatmullRom
+mrb_value mrb_get_spline_point_catmull_rom(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *p2;
+    Vector2 *p3;
+    Vector2 *p4;
+    mrb_float t;
+    mrb_get_args(mrb, "ddddf", &p1, &Raylib_Vector2_type, &p2, &Raylib_Vector2_type, &p3, &Raylib_Vector2_type, &p4, &Raylib_Vector2_type, &t);
+    Vector2 *vector = (Vector2 *)malloc(sizeof(Vector2));
+    *vector = GetSplinePointCatmullRom(*p1, *p2, *p3, *p4, t);
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, vector));
+
+    return obj;
+}
+
+// GetSplinePointBezierQuad
+mrb_value mrb_get_spline_point_bezier_quad(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *c2;
+    Vector2 *p3;
+    mrb_float t;
+    mrb_get_args(mrb, "dddf", &p1, &Raylib_Vector2_type, &c2, &Raylib_Vector2_type, &p3, &Raylib_Vector2_type, &t);
+    Vector2 *vector = (Vector2 *)malloc(sizeof(Vector2));
+    *vector = GetSplinePointBezierQuad(*p1, *c2, *p3, t);
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, vector));
+
+    return obj;
+}
+
+// GetSplinePointBezierCubic
+mrb_value mrb_get_spline_point_bezier_cubic(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *p1;
+    Vector2 *c2;
+    Vector2 *c3;
+    Vector2 *p4;
+    mrb_float t;
+    mrb_get_args(mrb, "ddddf", &p1, &Raylib_Vector2_type, &c2, &Raylib_Vector2_type, &c3, &Raylib_Vector2_type, &p4, &Raylib_Vector2_type, &t);
+    Vector2 *vector = (Vector2 *)malloc(sizeof(Vector2));
+    *vector = GetSplinePointBezierCubic(*p1, *c2, *c3, *p4, t);
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, vector));
+
+    return obj;
+}
+
 // CheckCollisionRecs
 mrb_value mrb_check_collision_recs(mrb_state *mrb, mrb_value self)
 {
@@ -655,10 +822,6 @@ void mrb_raylib_setup_shapes(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "draw_line_v", mrb_draw_line_v, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "draw_line_ex", mrb_draw_line_ex, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "draw_line_bezier", mrb_draw_line_bezier, MRB_ARGS_REQ(4));
-    mrb_define_module_function(mrb, raylib_module, "draw_line_bezier_quad", mrb_draw_line_bezier_quad, MRB_ARGS_REQ(5));
-    mrb_define_module_function(mrb, raylib_module, "draw_line_bezier_cubic", mrb_draw_line_bezier_cubic, MRB_ARGS_REQ(6));
-    mrb_define_module_function(mrb, raylib_module, "draw_line_b_spline", mrb_draw_line_b_spline, MRB_ARGS_REQ(4));
-    mrb_define_module_function(mrb, raylib_module, "draw_line_catmull_rom", mrb_draw_line_catmull_rom, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "draw_line_strip", mrb_draw_line_strip, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "draw_circle", mrb_draw_circle, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "draw_circle_sector", mrb_draw_circle_sector, MRB_ARGS_REQ(6));
@@ -689,6 +852,21 @@ void mrb_raylib_setup_shapes(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "draw_poly", mrb_draw_poly, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, raylib_module, "draw_poly_lines", mrb_draw_poly_lines, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, raylib_module, "draw_poly_lines_ex", mrb_draw_poly_lines_ex, MRB_ARGS_REQ(6));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_linear", mrb_draw_spline_linear, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_basis", mrb_draw_spline_basis, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_catmull_rom", mrb_draw_spline_catmull_rom, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_bezier_quadratic", mrb_draw_spline_bezier_quadratic, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_bezier_cubic", mrb_draw_spline_bezier_cubic, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_segment_linear", mrb_draw_spline_segment_linear, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_segment_basis", mrb_draw_spline_segment_basis, MRB_ARGS_REQ(6));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_segment_catmull_rom", mrb_draw_spline_segment_catmull_rom, MRB_ARGS_REQ(6));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_segment_quadratic", mrb_draw_spline_segment_bezier_quadratic, MRB_ARGS_REQ(5));
+    mrb_define_module_function(mrb, raylib_module, "draw_spline_segment_bezier_cubic", mrb_draw_spline_segment_bezier_cubic, MRB_ARGS_REQ(6));
+    mrb_define_module_function(mrb, raylib_module, "get_spline_point_linear", mrb_get_spline_point_linear, MRB_ARGS_REQ(3));
+    mrb_define_module_function(mrb, raylib_module, "get_spline_point_basis", mrb_get_spline_point_basis, MRB_ARGS_REQ(5));
+    mrb_define_module_function(mrb, raylib_module, "get_spline_point_catmull_rom", mrb_get_spline_point_catmull_rom, MRB_ARGS_REQ(5));
+    mrb_define_module_function(mrb, raylib_module, "get_spline_point_bezier_quad", mrb_get_spline_point_bezier_quad, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "get_spline_point_bezier_cubic", mrb_get_spline_point_bezier_cubic, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, raylib_module, "check_collision_recs?", mrb_check_collision_recs, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "check_collision_circles?", mrb_check_collision_circles, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "check_collision_circle_rec?", mrb_check_collision_circle_rec, MRB_ARGS_REQ(3));
