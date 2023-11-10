@@ -241,11 +241,11 @@ module Raylib
   class Camera2D
     alias_method :r_offset, :offset
     def offset
-      @offset = r_offset
+      @offset ||= r_offset
     end
     alias_method :r_target, :target
     def target
-      @target = r_target
+      @target ||= r_target
     end
 
     alias_method :r_offset_set, :offset=
@@ -258,6 +258,88 @@ module Raylib
     def target=(target)
       r_target_set(target)
       @target = target
+    end
+  end
+
+  class Ray
+    alias_method :r_position, :position
+    def position
+      @position ||= r_position
+    end
+    alias_method :r_direction, :direction
+    def direction
+      @direction ||= r_direction
+    end
+
+    alias_method :r_position_set, :position=
+    def position=(position)
+      r_position_set(position)
+      @position = position
+    end
+
+    alias_method :r_direction_set, :direction=
+    def direction=(direction)
+      r_direction_set(direction)
+      @direction = direction
+    end
+  end
+
+  class RayCollision
+    alias_method :r_point, :point
+    def point
+      @point ||= r_point
+    end
+    alias_method :r_normal, :normal
+    def normal
+      @normal ||= r_normal
+    end
+
+    alias_method :r_point_set, :point=
+    def point=(point)
+      r_point_set(point)
+      @point = point
+    end
+
+    alias_method :r_normal_set, :normal=
+    def normal=(normal)
+      r_normal_set(normal)
+      @normal = normal
+    end
+  end
+
+  class BoundingBox
+    alias_method :r_min, :min
+    def min
+      @min ||= r_min
+    end
+    alias_method :r_max, :max
+    def max
+      @max ||= r_max
+    end
+
+    alias_method :r_min_set, :min=
+    def min=(min)
+      r_min_set(min)
+      @min = min
+    end
+
+    alias_method :r_max_set, :max=
+    def max=(max)
+      r_max_set(max)
+      @max = max
+    end
+  end
+
+  class AutomationEventList
+    alias_method :r_events, :events
+    def events
+      @events ||= r_events
+    end
+
+    alias_method :r_events_set, :events=
+    def events=(events)
+      r_events_set(events)
+      @events = events
     end
   end
 end

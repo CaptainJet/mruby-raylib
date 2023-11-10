@@ -131,6 +131,8 @@ void mrb_free_raylib_model_animation(mrb_state *mrb, void *ptr)
 mrb_data_type Raylib_ModelAnimation_type = {"ModelAnimation", mrb_free_raylib_model_animation};
 struct RClass *Raylib_ModelAnimation_class;
 
+//-----------------------------------------------------------------------------------
+
 mrb_data_type Raylib_Ray_type = {"Ray", mrb_free};
 struct RClass *Raylib_Ray_class;
 
@@ -139,6 +141,8 @@ struct RClass *Raylib_RayCollision_class;
 
 mrb_data_type Raylib_BoundingBox_type = {"BoundingBox", mrb_free};
 struct RClass *Raylib_BoundingBox_class;
+
+//-----------------------------------------------------------------------------------
 
 void mrb_free_raylib_wave(mrb_state *mrb, void *ptr)
 {
@@ -181,6 +185,8 @@ void mrb_free_raylib_vrstreoconfig(mrb_state *mrb, void *ptr)
 }
 mrb_data_type Raylib_VrStereoConfig_type = {"VrStereoConfig", mrb_free_raylib_vrstreoconfig};
 struct RClass *Raylib_VrStereoConfig_class;
+
+//-----------------------------------------------------------------------------------
 
 void mrb_free_raylib_filepathlist(mrb_state *mrb, void *ptr)
 {
@@ -1668,6 +1674,468 @@ mrb_value mrb_Camera2D_set_zoom(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
+mrb_value mrb_Ray_initialize(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *position;
+    Vector3 *direction;
+    mrb_get_args(mrb, "dd", &position, &Raylib_Vector3_type, &direction, &Raylib_Vector3_type);
+
+    Ray *ray = (Ray *)DATA_PTR(self);
+    if (ray)
+    {
+        mrb_free(mrb, ray);
+    }
+    mrb_data_init(self, NULL, &Raylib_Ray_type);
+    ray = (Ray *)mrb_malloc(mrb, sizeof(Ray));
+
+    ray->position = *position;
+    ray->direction = *direction;
+
+    mrb_data_init(self, ray, &Raylib_Ray_type);
+    return self;
+}
+
+mrb_value mrb_Ray_get_position(mrb_state *mrb, mrb_value self)
+{
+    Ray *ray = (Ray *)DATA_PTR(self);
+    Vector3 *position = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
+    *position = ray->position;
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, position));
+    return obj;
+}
+
+mrb_value mrb_Ray_get_direction(mrb_state *mrb, mrb_value self)
+{
+    Ray *ray = (Ray *)DATA_PTR(self);
+    Vector3 *direction = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
+    *direction = ray->direction;
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, direction));
+    return obj;
+}
+
+mrb_value mrb_Ray_set_position(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *position;
+    mrb_get_args(mrb, "d", &position, &Raylib_Vector3_type);
+    Ray *ray = (Ray *)DATA_PTR(self);
+    ray->position = *position;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_Ray_set_direction(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *direction;
+    mrb_get_args(mrb, "d", &direction, &Raylib_Vector3_type);
+    Ray *ray = (Ray *)DATA_PTR(self);
+    ray->direction = *direction;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_RayCollision_initialize(mrb_state *mrb, mrb_value self)
+{
+    mrb_bool hit;
+    mrb_float distance;
+    Vector3 *point;
+    Vector3 *normal;
+    mrb_get_args(mrb, "bfdd", &hit, &distance, &point, &Raylib_Vector3_type, &normal, &Raylib_Vector3_type);
+
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    if (raycollision)
+    {
+        mrb_free(mrb, raycollision);
+    }
+    mrb_data_init(self, NULL, &Raylib_RayCollision_type);
+    raycollision = (RayCollision *)mrb_malloc(mrb, sizeof(RayCollision));
+
+    raycollision->hit = hit;
+    raycollision->distance = distance;
+    raycollision->point = *point;
+    raycollision->normal = *normal;
+
+    mrb_data_init(self, raycollision, &Raylib_RayCollision_type);
+    return self;
+}
+
+mrb_value mrb_RayCollision_get_hit(mrb_state *mrb, mrb_value self)
+{
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    return mrb_bool_value(raycollision->hit);
+}
+
+mrb_value mrb_RayCollision_get_distance(mrb_state *mrb, mrb_value self)
+{
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    return mrb_float_value(mrb, raycollision->distance);
+}
+
+mrb_value mrb_RayCollision_get_point(mrb_state *mrb, mrb_value self)
+{
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    Vector3 *point = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
+    *point = raycollision->point;
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, point));
+    return obj;
+}
+
+mrb_value mrb_RayCollision_get_normal(mrb_state *mrb, mrb_value self)
+{
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    Vector3 *normal = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
+    *normal = raycollision->normal;
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, normal));
+    return obj;
+}
+
+mrb_value mrb_RayCollision_set_hit(mrb_state *mrb, mrb_value self)
+{
+    mrb_bool hit;
+    mrb_get_args(mrb, "b", &hit);
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    raycollision->hit = hit;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_RayCollision_set_distance(mrb_state *mrb, mrb_value self)
+{
+    mrb_float distance;
+    mrb_get_args(mrb, "f", &distance);
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    raycollision->distance = distance;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_RayCollision_set_point(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *point;
+    mrb_get_args(mrb, "d", &point, &Raylib_Vector3_type);
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    raycollision->point = *point;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_RayCollision_set_normal(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *normal;
+    mrb_get_args(mrb, "d", &normal, &Raylib_Vector3_type);
+    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    raycollision->normal = *normal;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_BoundingBox_initialize(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *min;
+    Vector3 *max;
+    mrb_get_args(mrb, "dd", &min, &Raylib_Vector3_type, &max, &Raylib_Vector3_type);
+
+    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    if (boundingbox)
+    {
+        mrb_free(mrb, boundingbox);
+    }
+    mrb_data_init(self, NULL, &Raylib_BoundingBox_type);
+    boundingbox = (BoundingBox *)mrb_malloc(mrb, sizeof(BoundingBox));
+
+    boundingbox->min = *min;
+    boundingbox->max = *max;
+
+    mrb_data_init(self, boundingbox, &Raylib_BoundingBox_type);
+    return self;
+}
+
+mrb_value mrb_BoundingBox_get_min(mrb_state *mrb, mrb_value self)
+{
+    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    Vector3 *min = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
+    *min = boundingbox->min;
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, min));
+    return obj;
+}
+
+mrb_value mrb_BoundingBox_get_max(mrb_state *mrb, mrb_value self)
+{
+    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    Vector3 *max = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
+    *max = boundingbox->max;
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, max));
+    return obj;
+}
+
+mrb_value mrb_BoundingBox_set_min(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *min;
+    mrb_get_args(mrb, "d", &min, &Raylib_Vector3_type);
+    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    boundingbox->min = *min;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_BoundingBox_set_max(mrb_state *mrb, mrb_value self)
+{
+    Vector3 *max;
+    mrb_get_args(mrb, "d", &max, &Raylib_Vector3_type);
+    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    boundingbox->max = *max;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_FilePathList_initialize(mrb_state *mrb, mrb_value self)
+{
+    mrb_int capacity;
+    mrb_int count;
+    mrb_value paths;
+    mrb_get_args(mrb, "iiA", &capacity, &count, &paths);
+
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    if (filepathlist)
+    {
+        mrb_free(mrb, filepathlist);
+    }
+    mrb_data_init(self, NULL, &Raylib_FilePathList_type);
+    filepathlist = (FilePathList *)mrb_malloc(mrb, sizeof(FilePathList));
+
+    filepathlist->capacity = capacity;
+    filepathlist->count = count;
+    
+    char *path_values[count];
+    for (int i = 0; i < count; ++i)
+    {
+        path_values[i] = (char *)mrb_string_cstr(mrb, mrb_ary_entry(paths, i));
+    }
+    filepathlist->paths = path_values;
+
+
+    mrb_data_init(self, filepathlist, &Raylib_FilePathList_type);
+    return self;
+}
+
+mrb_value mrb_FilePathList_get_capacity(mrb_state *mrb, mrb_value self)
+{
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    return mrb_int_value(mrb, filepathlist->capacity);
+}
+
+mrb_value mrb_FilePathList_get_count(mrb_state *mrb, mrb_value self)
+{
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    return mrb_int_value(mrb, filepathlist->count);
+}
+
+mrb_value mrb_FilePathList_get_paths(mrb_state *mrb, mrb_value self)
+{
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    mrb_value ary = mrb_ary_new(mrb);
+    for (int i = 0; i < filepathlist->count; ++i)
+    {
+        mrb_ary_push(mrb, ary, mrb_str_new_cstr(mrb, filepathlist->paths[i]));
+    }
+    return ary;
+}
+
+mrb_value mrb_FilePathList_set_capacity(mrb_state *mrb, mrb_value self)
+{
+    mrb_int capacity;
+    mrb_get_args(mrb, "i", &capacity);
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    filepathlist->capacity = capacity;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_FilePathList_set_count(mrb_state *mrb, mrb_value self)
+{
+    mrb_int count;
+    mrb_get_args(mrb, "i", &count);
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    filepathlist->count = count;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_FilePathList_set_paths(mrb_state *mrb, mrb_value self)
+{
+    mrb_value paths;
+    mrb_get_args(mrb, "A", &paths);
+    char *path_values[RARRAY_LEN(paths)];
+    for (int i = 0; i < RARRAY_LEN(paths); ++i)
+    {
+        path_values[i] = (char *)mrb_string_cstr(mrb, mrb_ary_entry(paths, i));
+    }
+    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    filepathlist->paths = path_values;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_AutomationEvent_initialize(mrb_state *mrb, mrb_value self)
+{
+    mrb_int frame;
+    mrb_int type;
+    mrb_value params;
+    mrb_get_args(mrb, "iiA", &frame, &type, &params);
+
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    if (automationevent)
+    {
+        mrb_free(mrb, automationevent);
+    }
+    mrb_data_init(self, NULL, &Raylib_AutomationEvent_type);
+    automationevent = (AutomationEvent *)mrb_malloc(mrb, sizeof(AutomationEvent));
+
+    automationevent->frame = frame;
+    automationevent->type = type;
+    
+    int params_values[4];
+    for (int i = 0; i < 4; ++i)
+    { 
+        params_values[i] = mrb_int(mrb, mrb_ary_entry(params, i));
+    }
+    *automationevent->params = *params_values;
+
+
+    mrb_data_init(self, automationevent, &Raylib_AutomationEvent_type);
+    return self;
+}
+
+mrb_value mrb_AutomationEvent_get_frame(mrb_state *mrb, mrb_value self)
+{
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    return mrb_int_value(mrb, automationevent->frame);
+}
+
+mrb_value mrb_AutomationEvent_get_type(mrb_state *mrb, mrb_value self)
+{
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    return mrb_int_value(mrb, automationevent->type);
+}
+
+mrb_value mrb_AutomationEvent_get_params(mrb_state *mrb, mrb_value self)
+{
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    mrb_value ary = mrb_ary_new(mrb);
+    for (int i = 0; i < 4; ++i)
+    {
+        mrb_ary_push(mrb, ary, mrb_int_value(mrb, automationevent->params[i]));
+    }
+    return ary;
+}
+
+mrb_value mrb_AutomationEvent_set_frame(mrb_state *mrb, mrb_value self)
+{
+    mrb_int frame;
+    mrb_get_args(mrb, "i", &frame);
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    automationevent->frame = frame;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_AutomationEvent_set_type(mrb_state *mrb, mrb_value self)
+{
+    mrb_int type;
+    mrb_get_args(mrb, "i", &type);
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    automationevent->type = type;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_AutomationEvent_set_params(mrb_state *mrb, mrb_value self)
+{
+    mrb_value params;
+    mrb_get_args(mrb, "A", &params);
+    int param_values[4];
+    for (int i = 0; i < 4; ++i)
+    {
+        param_values[i] = mrb_int(mrb, mrb_ary_entry(params, i));
+    }
+    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    *automationevent->params = *param_values;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_AutomationEventList_initialize(mrb_state *mrb, mrb_value self)
+{
+    mrb_int capacity;
+    mrb_int count;
+    mrb_value events;
+    mrb_get_args(mrb, "iiA", &capacity, &count, &events);
+
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    if (automationeventlist)
+    {
+        mrb_free(mrb, automationeventlist);
+    }
+    mrb_data_init(self, NULL, &Raylib_AutomationEventList_type);
+    automationeventlist = (AutomationEventList *)mrb_malloc(mrb, sizeof(AutomationEventList));
+
+    automationeventlist->capacity = capacity;
+    automationeventlist->count = count;
+    
+    AutomationEvent events_values[count];
+    for (int i = 0; i < count; ++i)
+    {
+        events_values[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(events, i), &Raylib_AutomationEvent_type, AutomationEvent);
+    }
+    automationeventlist->events = events_values;
+
+
+    mrb_data_init(self, automationeventlist, &Raylib_AutomationEventList_type);
+    return self;
+}
+
+mrb_value mrb_AutomationEventList_get_capacity(mrb_state *mrb, mrb_value self)
+{
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    return mrb_int_value(mrb, automationeventlist->capacity);
+}
+
+mrb_value mrb_AutomationEventList_get_count(mrb_state *mrb, mrb_value self)
+{
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    return mrb_int_value(mrb, automationeventlist->count);
+}
+
+mrb_value mrb_AutomationEventList_get_events(mrb_state *mrb, mrb_value self)
+{
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    mrb_value ary = mrb_ary_new(mrb);
+    for (int i = 0; i < automationeventlist->count; ++i)
+    {
+        AutomationEvent *automationevent = (AutomationEvent *)malloc(sizeof(AutomationEvent));
+        *automationevent = automationeventlist->events[i];
+        mrb_ary_push(mrb, ary, mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_AutomationEvent_class, &Raylib_AutomationEvent_type, automationevent)));
+    }
+    return ary;
+}
+
+mrb_value mrb_AutomationEventList_set_capacity(mrb_state *mrb, mrb_value self)
+{
+    mrb_int capacity;
+    mrb_get_args(mrb, "i", &capacity);
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    automationeventlist->capacity = capacity;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_AutomationEventList_set_count(mrb_state *mrb, mrb_value self)
+{
+    mrb_int count;
+    mrb_get_args(mrb, "i", &count);
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    automationeventlist->count = count;
+    return mrb_nil_value();
+}
+
+mrb_value mrb_AutomationEventList_set_events(mrb_state *mrb, mrb_value self)
+{
+    mrb_value events;
+    mrb_get_args(mrb, "A", &events);
+    AutomationEvent event_values[RARRAY_LEN(events)];
+    for (int i = 0; i < RARRAY_LEN(events); ++i)
+    {
+        event_values[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(events, i), &Raylib_AutomationEvent_type, AutomationEvent);
+    }
+    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    automationeventlist->events = event_values;
+    return mrb_nil_value();
+}
+
 void mrb_raylib_setup_structs(mrb_state *mrb, struct RClass *raylib_module)
 {
 
@@ -1895,12 +2363,31 @@ void mrb_raylib_setup_structs(mrb_state *mrb, struct RClass *raylib_module)
 
     Raylib_Ray_class = mrb_define_class_under(mrb, raylib_module, "Ray", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_Ray_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_Ray_class, "initialize", mrb_Ray_initialize, MRB_ARGS_REQ(2));
+    mrb_define_method(mrb, Raylib_Ray_class, "position=", mrb_Ray_set_position, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_Ray_class, "direction=", mrb_Ray_set_direction, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_Ray_class, "position", mrb_Ray_get_position, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_Ray_class, "direction", mrb_Ray_get_direction, MRB_ARGS_NONE());
 
     Raylib_RayCollision_class = mrb_define_class_under(mrb, raylib_module, "RayCollision", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_RayCollision_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_RayCollision_class, "initialize", mrb_RayCollision_initialize, MRB_ARGS_REQ(4));
+    mrb_define_method(mrb, Raylib_RayCollision_class, "hit=", mrb_RayCollision_set_hit, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_RayCollision_class, "distance=", mrb_RayCollision_set_distance, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_RayCollision_class, "point=", mrb_RayCollision_set_point, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_RayCollision_class, "normal=", mrb_RayCollision_set_normal, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_RayCollision_class, "hit", mrb_RayCollision_get_hit, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_RayCollision_class, "distance", mrb_RayCollision_get_distance, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_RayCollision_class, "point", mrb_RayCollision_get_point, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_RayCollision_class, "normal", mrb_RayCollision_get_normal, MRB_ARGS_NONE());
 
     Raylib_BoundingBox_class = mrb_define_class_under(mrb, raylib_module, "BoundingBox", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_BoundingBox_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_BoundingBox_class, "initialize", mrb_BoundingBox_initialize, MRB_ARGS_REQ(2));
+    mrb_define_method(mrb, Raylib_BoundingBox_class, "min=", mrb_BoundingBox_set_min, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_BoundingBox_class, "max=", mrb_BoundingBox_set_max, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_BoundingBox_class, "min", mrb_BoundingBox_get_min, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_BoundingBox_class, "max", mrb_BoundingBox_get_max, MRB_ARGS_NONE());
 
     Raylib_Wave_class = mrb_define_class_under(mrb, raylib_module, "Wave", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_Wave_class, MRB_TT_CDATA);
@@ -1922,10 +2409,31 @@ void mrb_raylib_setup_structs(mrb_state *mrb, struct RClass *raylib_module)
 
     Raylib_FilePathList_class = mrb_define_class_under(mrb, raylib_module, "FilePathList", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_FilePathList_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_FilePathList_class, "initialize", mrb_FilePathList_initialize, MRB_ARGS_REQ(3));
+    mrb_define_method(mrb, Raylib_FilePathList_class, "capacity=", mrb_FilePathList_set_capacity, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_FilePathList_class, "count=", mrb_FilePathList_set_count, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_FilePathList_class, "paths=", mrb_FilePathList_set_paths, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_FilePathList_class, "capacity", mrb_FilePathList_get_capacity, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_FilePathList_class, "count", mrb_FilePathList_get_count, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_FilePathList_class, "paths", mrb_FilePathList_get_paths, MRB_ARGS_NONE());
 
     Raylib_AutomationEvent_class = mrb_define_class_under(mrb, raylib_module, "AutomationEvent", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_AutomationEvent_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "initialize", mrb_AutomationEvent_initialize, MRB_ARGS_REQ(3));
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "frame=", mrb_AutomationEvent_set_frame, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "type=", mrb_AutomationEvent_set_type, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "params=", mrb_AutomationEvent_set_params, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "frame", mrb_AutomationEvent_get_frame, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "type", mrb_AutomationEvent_get_type, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_AutomationEvent_class, "params", mrb_AutomationEvent_get_params, MRB_ARGS_NONE());
 
     Raylib_AutomationEventList_class = mrb_define_class_under(mrb, raylib_module, "AutomationEventList", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_AutomationEventList_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "initialize", mrb_AutomationEventList_initialize, MRB_ARGS_REQ(3));
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "capacity=", mrb_AutomationEventList_set_capacity, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "count=", mrb_AutomationEventList_set_count, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "events=", mrb_AutomationEventList_set_events, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "capacity", mrb_AutomationEventList_get_capacity, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "count", mrb_AutomationEventList_get_count, MRB_ARGS_NONE());
+    mrb_define_method(mrb, Raylib_AutomationEventList_class, "events", mrb_AutomationEventList_get_events, MRB_ARGS_NONE());
 }

@@ -131,18 +131,12 @@ Model
 Transform
 BoneInfo
 ModelAnimation
-Ray
-RayCollision
-BoundingBox
 Wave
 Sound
 Music
 AudioStream
 VrDeviceInfo
 VrStereoConfig
-FilePathList
-AutomationEvent
-AutomationEventList
 ```
 
 ## License
