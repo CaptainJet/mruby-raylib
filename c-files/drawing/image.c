@@ -410,6 +410,22 @@ mrb_value mrb_image_blur_gaussian(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
+// ImageKernelConvolution
+mrb_value mrb_image_kernel_convolution(mrb_state *mrb, mrb_value self)
+{
+    Image *image;
+    mrb_value kernel;
+    mrb_int kernelSize;
+    mrb_get_args(mrb, "dAi", &image, &Raylib_Image_type, &kernel, &kernelSize);
+    float kernel_values[kernelSize];
+    for (int i = 0; i < kernelSize; ++i)
+    {
+        kernel_values[i] = mrb_float(mrb_ary_entry(kernel, i));
+    }
+    ImageKernelConvolution(image, kernel_values, kernelSize);
+    return mrb_nil_value();
+}
+
 // ImageResize
 mrb_value mrb_image_resize(mrb_state *mrb, mrb_value self)
 {
@@ -898,6 +914,7 @@ void mrb_raylib_setup_image(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "image_alpha_mask", mrb_image_alpha_mask, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "image_alpha_premultiply", mrb_image_alpha_premultiply, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "image_blur_gaussian", mrb_image_blur_gaussian, MRB_ARGS_REQ(2));
+    mrb_define_module_function(mrb, raylib_module, "image_kernel_convolution", mrb_image_kernel_convolution, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "image_resize", mrb_image_resize, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "image_resize_nn", mrb_image_resize_nn, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "image_resize_canvas", mrb_image_resize_canvas, MRB_ARGS_REQ(6));

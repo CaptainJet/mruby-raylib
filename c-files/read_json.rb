@@ -1,6 +1,7 @@
 require "json"
 
 raylib = JSON.parse(File.read("raylib_api.json"))
+raygui = JSON.parse(File.read("raygui_api.json"))
 
 str = "
 module Raylib
@@ -9,6 +10,10 @@ module Raylib
   Camera3D = Camera
   Texture2D = TextureCubemap = Texture
   Quaternion = Vector4
+
+"
+str_gui = "
+module RayGUI
 
 "
 raylib["defines"].select { |a| ["FLOAT", "FLOAT_MATH", "INT", "STRING"].include?(a["type"]) }.each do |a|
@@ -21,9 +26,20 @@ raylib["defines"].select { |a| ["FLOAT", "FLOAT_MATH", "INT", "STRING"].include?
   str << "  " + a["name"] + " = " + a["value"].to_s + "\n"
 end
 str << "\n"
+
+raygui["defines"].select { |a| ["FLOAT", "FLOAT_MATH", "INT", "STRING"].include?(a["type"]) }.each do |a|
+  case a["type"]
+  when "FLOAT_MATH"
+    a["value"].delete!("f")
+  when "STRING"
+    a["value"] = "\"#{a["value"]}\""
+  end
+  str_gui << "  " + a["name"] + " = " + a["value"].to_s + "\n"
+end
+str_gui << "\n"
+
 mods = ""
 unknowns = raylib["defines"].select { |a| a["type"] == "UNKNOWN" }
-p unknowns
 raylib["enums"].each do |a|
   str << "  module #{a["name"]}\n\n"
   a["values"].each do |b|
@@ -67,4 +83,23 @@ str << "  def self.include_enums#{mods}
 
 end"
 
+mods = ""
+unknowns = raygui["defines"].select { |a| a["type"] == "UNKNOWN" }
+raygui["enums"].each do |a|
+  str_gui << "  module #{a["name"]}\n\n"
+  a["values"].each do |b|
+    str_gui << "    #{b["name"]} = #{b["value"]} # #{b["description"]}\n"
+    unk = unknowns.find { |k| k["value"] == b["name"] }
+    str_gui << "    #{unk["name"]} = #{b["name"]}\n" unless unk.nil?
+  end
+  str_gui << "\n  end\n\n"
+  mods << "\n    include #{a["name"]}"
+end
+
+str_gui << "  def self.include_enums#{mods}
+  end
+
+end"
+
 File.write("../mrblib/mruby_raylib.rb", str)
+File.write("../mrblib/mruby_raygui.rb", str_gui)

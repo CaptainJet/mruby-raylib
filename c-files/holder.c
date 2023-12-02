@@ -48,3 +48,5 @@
 #include "input/keyboard.c"
 #include "input/mouse.c"
 #include "input/touch.c"
+
+#include "raygui/raygui.c"

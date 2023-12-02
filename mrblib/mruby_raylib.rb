@@ -4,10 +4,10 @@ module Raylib
   Texture2D = TextureCubemap = Texture
   Quaternion = Vector4
 
-  RAYLIB_VERSION_MAJOR = 4
-  RAYLIB_VERSION_MINOR = 6
+  RAYLIB_VERSION_MAJOR = 5
+  RAYLIB_VERSION_MINOR = 1
   RAYLIB_VERSION_PATCH = 0
-  RAYLIB_VERSION = "4.6-dev"
+  RAYLIB_VERSION = "5.1-dev"
   PI = 3.141592653589793
   DEG2RAD = (PI / 180.0)
   RAD2DEG = (180.0 / PI)
@@ -26,6 +26,7 @@ module Raylib
     FLAG_WINDOW_TRANSPARENT = 16 # Set to allow transparent framebuffer
     FLAG_WINDOW_HIGHDPI = 8192 # Set to support HighDPI
     FLAG_WINDOW_MOUSE_PASSTHROUGH = 16384 # Set to support mouse passthrough, only supported when FLAG_WINDOW_UNDECORATED
+    FLAG_BORDERLESS_WINDOWED_MODE = 32768 # Set to run program in borderless windowed mode
     FLAG_MSAA_4X_HINT = 32 # Set to try enabling MSAA 4X
     FLAG_INTERLACED_HINT = 65536 # Set to try enabling interlaced video format (for V3D)
   end

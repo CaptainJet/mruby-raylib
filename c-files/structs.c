@@ -1,5 +1,8 @@
 #include <stdlib.h>
+#include <string.h>
 #include "raylib.h"
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 #include "mruby.h"
 #include "mruby/string.h"
 #include "mruby/numeric.h"
@@ -1879,6 +1882,21 @@ mrb_value mrb_BoundingBox_set_max(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
+mrb_value mrb_Music_get_looping(mrb_state *mrb, mrb_value self)
+{
+    Music *music = (Music *)DATA_PTR(self);
+    return mrb_bool_value(music->looping);
+}
+
+mrb_value mrb_Music_set_looping(mrb_state *mrb, mrb_value self)
+{
+    mrb_bool looping;
+    mrb_get_args(mrb, "b", &looping);
+    Music *music = (Music *)DATA_PTR(self);
+    music->looping = looping;
+    return mrb_nil_value();
+}
+
 mrb_value mrb_FilePathList_initialize(mrb_state *mrb, mrb_value self)
 {
     mrb_int capacity;
@@ -2400,6 +2418,8 @@ void mrb_raylib_setup_structs(mrb_state *mrb, struct RClass *raylib_module)
 
     Raylib_Music_class = mrb_define_class_under(mrb, raylib_module, "Music", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_Music_class, MRB_TT_CDATA);
+    mrb_define_method(mrb, Raylib_Music_class, "looping=", mrb_Music_set_looping, MRB_ARGS_REQ(1));
+    mrb_define_method(mrb, Raylib_Music_class, "looping", mrb_Music_get_looping, MRB_ARGS_NONE());
 
     Raylib_VrDeviceInfo_class = mrb_define_class_under(mrb, raylib_module, "VrDeviceInfo", mrb->object_class);
     MRB_SET_INSTANCE_TT(Raylib_VrDeviceInfo_class, MRB_TT_CDATA);

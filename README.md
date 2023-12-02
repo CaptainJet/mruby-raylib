@@ -55,13 +55,13 @@ SUPPORT_BUSY_WAIT_LOOP
 and compiled with the following commands on Arch Linux:
 
 ```Ruby
-make # Linux
-emmake make PLATFORM=PLATFORM_WEB # WebAssembly
-make CC=x86_64-w64-mingw32-gcc PLATFORM=PLATFORM_DESKTOP PLATFORM_OS=WINDOWS # Windows
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm64 # Android aarch64
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm # Android armv7a
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86_64 # Android X86_64
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86 # Android i686
+make RAYLIB_MODULE_RAYGUI=TRUE # Linux
+emmake make PLATFORM=PLATFORM_WEB RAYLIB_MODULE_RAYGUI=TRUE # WebAssembly
+make CC=x86_64-w64-mingw32-gcc PLATFORM=PLATFORM_DESKTOP PLATFORM_OS=WINDOWS RAYLIB_MODULE_RAYGUI=TRUE # Windows
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm64 RAYLIB_MODULE_RAYGUI=TRUE # Android aarch64
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm RAYLIB_MODULE_RAYGUI=TRUE # Android armv7a
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86_64 RAYLIB_MODULE_RAYGUI=TRUE # Android X86_64
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86 RAYLIB_MODULE_RAYGUI=TRUE # Android i686
 ```
 
 ## Notes
@@ -133,10 +133,27 @@ BoneInfo
 ModelAnimation
 Wave
 Sound
-Music
+Music # Exception: you can get/set the looping attribute
 AudioStream
 VrDeviceInfo
 VrStereoConfig
+```
+
+RayGUI functions return what the header says it should. For example, GuiToggle will return true/false, not an int.
+Please refer to the raygui.h header to figure out what a given function should return.
+
+The following methods are exceptions to those rules, or have other quirks:
+```
+# These return an array of [return value of function, *(index/active/focus)]
+# Essentially, if the C version usually modifies an int in place, the ruby version
+# returns all the modified ints as an array instead, requring you to manually manage them.
+GuiTabBar
+GuiDropdownBox 
+GuiValueBox
+GuiListView
+GuiListViewEx
+
+GuiLoadIcons # This function does work but will not return a value besides nil
 ```
 
 ## License

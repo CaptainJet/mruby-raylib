@@ -49,15 +49,6 @@ mrb_value mrb_draw_mesh_instanced(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
-// ExportMesh
-mrb_value mrb_export_mesh(mrb_state *mrb, mrb_value self)
-{
-    Mesh *mesh;
-    const char *filename;
-    mrb_get_args(mrb, "dz", &mesh, &Raylib_Mesh_type, &filename);
-    return mrb_bool_value(ExportMesh(*mesh, filename));
-}
-
 // GetMeshBoundingBox
 mrb_value mrb_get_mesh_bounding_box(mrb_state *mrb, mrb_value self)
 {
@@ -78,13 +69,32 @@ mrb_value mrb_gen_mesh_tangents(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
+// ExportMesh
+mrb_value mrb_export_mesh(mrb_state *mrb, mrb_value self)
+{
+    Mesh *mesh;
+    const char *filename;
+    mrb_get_args(mrb, "dz", &mesh, &Raylib_Mesh_type, &filename);
+    return mrb_bool_value(ExportMesh(*mesh, filename));
+}
+
+// ExportMeshAsCode
+mrb_value mrb_export_mesh_as_code(mrb_state *mrb, mrb_value self)
+{
+    Mesh *mesh;
+    const char *filename;
+    mrb_get_args(mrb, "dz", &mesh, &Raylib_Mesh_type, &filename);
+    return mrb_bool_value(ExportMeshAsCode(*mesh, filename));
+}
+
 void mrb_raylib_setup_mesh_management(mrb_state *mrb, struct RClass *raylib_module)
 {
     mrb_define_module_function(mrb, raylib_module, "upload_mesh", mrb_upload_mesh, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "unload_mesh", mrb_unload_mesh, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "draw_mesh", mrb_draw_mesh, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "draw_mesh_instanced", mrb_draw_mesh_instanced, MRB_ARGS_REQ(4));
-    mrb_define_module_function(mrb, raylib_module, "export_mesh", mrb_export_mesh, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "get_mesh_bounding_box", mrb_get_mesh_bounding_box, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "gen_mesh_tangents", mrb_gen_mesh_tangents, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "export_mesh", mrb_export_mesh, MRB_ARGS_REQ(2));
+    mrb_define_module_function(mrb, raylib_module, "export_mesh_as_code", mrb_export_mesh_as_code, MRB_ARGS_REQ(2));
 }
