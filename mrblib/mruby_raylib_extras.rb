@@ -148,5 +148,5 @@ module Raylib
     WhiteSmoke = Raylib::Color.new(245, 245, 245, 255)
     Yellow = Raylib::Color.new(255, 255, 0, 255)
     YellowGreen = Raylib::Color.new(154, 205, 50, 255)
-  end
+  end 
 end

@@ -26,12 +26,12 @@ mrb_value mrb_load_model_from_mesh(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsModelReady
-mrb_value mrb_is_model_ready(mrb_state *mrb, mrb_value self)
+// IsModelValid
+mrb_value mrb_is_model_valid(mrb_state *mrb, mrb_value self)
 {
     Model *model;
     mrb_get_args(mrb, "d", &model, &Raylib_Model_type);
-    return mrb_bool_value(IsModelReady(*model));
+    return mrb_bool_value(IsModelValid(*model));
 }
 
 // UnloadModel
@@ -59,7 +59,7 @@ void mrb_raylib_setup_model_management(mrb_state *mrb, struct RClass *raylib_mod
 {
     mrb_define_module_function(mrb, raylib_module, "load_model", mrb_load_model, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_model_from_mesh", mrb_load_model_from_mesh, MRB_ARGS_REQ(1));
-    mrb_define_module_function(mrb, raylib_module, "is_model_ready?", mrb_is_model_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_model_valid?", mrb_is_model_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_model", mrb_unload_model, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "get_model_bounding_box", mrb_get_model_bounding_box, MRB_ARGS_REQ(1));
 }

@@ -94,12 +94,12 @@ mrb_value mrb_load_font_from_memory(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsFontReady
-mrb_value mrb_is_font_ready(mrb_state *mrb, mrb_value self)
+// IsFontValid
+mrb_value mrb_is_font_valid(mrb_state *mrb, mrb_value self)
 {
     Font *font;
     mrb_get_args(mrb, "d", &font, &Raylib_Font_type);
-    return mrb_bool_value(IsFontReady(*font));
+    return mrb_bool_value(IsFontValid(*font));
 }
 
 // LoadFontData
@@ -202,7 +202,7 @@ void mrb_raylib_setup_font_loading(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "load_font_ex", mrb_load_font_ex, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "load_font_from_image", mrb_load_font_from_image, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "load_font_from_memory", mrb_load_font_from_memory, MRB_ARGS_REQ(6));
-    mrb_define_module_function(mrb, raylib_module, "is_font_ready?", mrb_is_font_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_font_valid?", mrb_is_font_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_font_data", mrb_load_font_data, MRB_ARGS_REQ(6));
     mrb_define_module_function(mrb, raylib_module, "gen_image_font_atlas", mrb_gen_image_font_atlas, MRB_ARGS_REQ(6));
     mrb_define_module_function(mrb, raylib_module, "unload_font_data", mrb_unload_font_data, MRB_ARGS_REQ(2));

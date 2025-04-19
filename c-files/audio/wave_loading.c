@@ -64,20 +64,20 @@ mrb_value mrb_load_sound_alias(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsSoundReady
-mrb_value mrb_is_sound_ready(mrb_state *mrb, mrb_value self)
+// IsSoundValid
+mrb_value mrb_is_sound_valid(mrb_state *mrb, mrb_value self)
 {
     Sound *sound;
     mrb_get_args(mrb, "d", &sound, &Raylib_Sound_type);
-    return mrb_bool_value(IsSoundReady(*sound));
+    return mrb_bool_value(IsSoundValid(*sound));
 }
 
-// IsWaveReady
-mrb_value mrb_is_wave_ready(mrb_state *mrb, mrb_value self)
+// IsWaveValid
+mrb_value mrb_is_wave_valid(mrb_state *mrb, mrb_value self)
 {
     Wave *wave;
     mrb_get_args(mrb, "d", &wave, &Raylib_Wave_type);
-    return mrb_bool_value(IsWaveReady(*wave));
+    return mrb_bool_value(IsWaveValid(*wave));
 }
 
 // UnloadWave
@@ -132,8 +132,8 @@ void mrb_raylib_setup_wave_loading(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "load_sound", mrb_load_sound, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_sound_from_wave", mrb_load_sound_from_wave, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_sound_alias", mrb_load_sound_alias, MRB_ARGS_REQ(1));
-    mrb_define_module_function(mrb, raylib_module, "is_sound_ready?", mrb_is_sound_ready, MRB_ARGS_REQ(1));
-    mrb_define_module_function(mrb, raylib_module, "is_wave_ready?", mrb_is_wave_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_sound_valid?", mrb_is_sound_valid, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_wave_valid?", mrb_is_wave_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_sound", mrb_unload_sound, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_sound_alias", mrb_unload_sound, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_wave", mrb_unload_wave, MRB_ARGS_REQ(1));

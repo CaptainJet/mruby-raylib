@@ -407,6 +407,23 @@ mrb_value mrb_gui_value_box(mrb_state *mrb, mrb_value self)
     return ary;
 }
 
+// GuiValueBoxFloat
+mrb_value mrb_gui_value_box_float(mrb_state *mrb, mrb_value self)
+{
+    Rectangle *bounds;
+    const char *text;
+    char *text_value;
+    mrb_float value;
+    mrb_bool editmode;
+    mrb_get_args(mrb, "dzzfb", &bounds, &Raylib_Rectangle_type, &text, &text_value, &value, &editmode);
+    float index = value;
+    int out = GuiValueBoxFloat(*bounds, text, text_value, &index, editmode);
+    mrb_value ary = mrb_ary_new(mrb);
+    mrb_ary_push(mrb, ary, mrb_int_value(mrb, out));
+    mrb_ary_push(mrb, ary, mrb_float_value(mrb, index));
+    return ary;
+}
+
 // GuiTextBox
 mrb_value mrb_gui_text_box(mrb_state *mrb, mrb_value self)
 {
@@ -682,6 +699,7 @@ void mrb_raylib_setup_raygui(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_dropdown_box", mrb_gui_dropdown_box, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_spinner", mrb_gui_spinner, MRB_ARGS_REQ(6));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_value_box", mrb_gui_value_box, MRB_ARGS_REQ(6));
+    mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_value_box_float", mrb_gui_value_box_float, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_text_box", mrb_gui_text_box, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_slider", mrb_gui_slider, MRB_ARGS_REQ(6));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_slider_bar", mrb_gui_slider_bar, MRB_ARGS_REQ(6));
@@ -692,7 +710,6 @@ void mrb_raylib_setup_raygui(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_list_view", mrb_gui_list_view, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_list_view_ex", mrb_gui_list_view_ex, MRB_ARGS_REQ(6));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_message_box", mrb_gui_message_box, MRB_ARGS_REQ(4));
-    mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_text_input_box", mrb_gui_text_input_box, MRB_ARGS_REQ(7));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_text_input_box", mrb_gui_text_input_box, MRB_ARGS_REQ(7));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_color_picker", mrb_gui_color_picker, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, Raylib_Raygui_module, "gui_color_panel", mrb_gui_color_panel, MRB_ARGS_REQ(3));

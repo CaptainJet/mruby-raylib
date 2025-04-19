@@ -30,20 +30,6 @@ mrb_value mrb_load_image_raw(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// LoadImageSvg
-mrb_value mrb_load_image_svg(mrb_state *mrb, mrb_value self)
-{
-    const char *filename;
-    mrb_int width;
-    mrb_int height;
-    mrb_get_args(mrb, "zii", &filename, &width, &height);
-    Image *image = (Image *)malloc(sizeof(Image));
-    *image = LoadImageSvg(filename, width, height);
-    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Image_class, &Raylib_Image_type, image));
-
-    return obj;
-}
-
 // LoadImageAnim
 mrb_value mrb_load_image_anim(mrb_state *mrb, mrb_value self)
 {
@@ -93,12 +79,12 @@ mrb_value mrb_load_image_from_screen(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsImageReady
-mrb_value mrb_is_image_ready(mrb_state *mrb, mrb_value self)
+// IsImageValid
+mrb_value mrb_is_image_valid(mrb_state *mrb, mrb_value self)
 {
     Image *image;
     mrb_get_args(mrb, "d", &image, &Raylib_Image_type);
-    return mrb_bool_value(IsImageReady(*image));
+    return mrb_bool_value(IsImageValid(*image));
 }
 
 // UnloadImage
@@ -883,12 +869,11 @@ void mrb_raylib_setup_image(mrb_state *mrb, struct RClass *raylib_module)
 {
     mrb_define_module_function(mrb, raylib_module, "load_image", mrb_load_image, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_image_raw", mrb_load_image_raw, MRB_ARGS_REQ(5));
-    mrb_define_module_function(mrb, raylib_module, "load_image_svg", mrb_load_image_svg, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "load_image_anim", mrb_load_image_anim, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "load_image_from_memory", mrb_load_image_from_memory, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "load_image_from_texture", mrb_load_image_from_texture, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_image_from_screen", mrb_load_image_from_screen, MRB_ARGS_NONE());
-    mrb_define_module_function(mrb, raylib_module, "is_image_ready?", mrb_is_image_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_image_valid?", mrb_is_image_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_image", mrb_unload_image, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "export_image", mrb_export_image, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "export_image_to_memory", mrb_export_image_to_memory, MRB_ARGS_REQ(3));
@@ -947,10 +932,10 @@ void mrb_raylib_setup_image(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "draw_circle_lines", mrb_image_draw_circle_lines, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, raylib_module, "draw_circle_lines_v", mrb_image_draw_circle_lines_v, MRB_ARGS_REQ(4));
 
-    mrb_define_module_function(mrb, raylib_module, "draw_rectangle", mrb_image_draw_rectangle, MRB_ARGS_REQ(6));
-    mrb_define_module_function(mrb, raylib_module, "draw_rectangle_v", mrb_image_draw_rectangle_v, MRB_ARGS_REQ(4));
-    mrb_define_module_function(mrb, raylib_module, "draw_rectangle_rec", mrb_image_draw_rectangle_rec, MRB_ARGS_REQ(3));
-    mrb_define_module_function(mrb, raylib_module, "draw_rectangle_lines", mrb_image_draw_rectangle_lines, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "image_draw_rectangle", mrb_image_draw_rectangle, MRB_ARGS_REQ(6));
+    mrb_define_module_function(mrb, raylib_module, "image_draw_rectangle_v", mrb_image_draw_rectangle_v, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, raylib_module, "image_draw_rectangle_rec", mrb_image_draw_rectangle_rec, MRB_ARGS_REQ(3));
+    mrb_define_module_function(mrb, raylib_module, "image_draw_rectangle_lines", mrb_image_draw_rectangle_lines, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "image_draw", mrb_image_draw, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, raylib_module, "image_draw_text", mrb_image_draw_text, MRB_ARGS_REQ(6));
     mrb_define_module_function(mrb, raylib_module, "image_draw_text_ex", mrb_image_draw_text_ex, MRB_ARGS_REQ(7));

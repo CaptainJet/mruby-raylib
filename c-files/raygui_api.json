@@ -15,7 +15,7 @@
     {
       "name": "RAYGUI_VERSION_MINOR",
       "type": "INT",
-      "value": 0,
+      "value": 5,
       "description": ""
     },
     {
@@ -27,7 +27,7 @@
     {
       "name": "RAYGUI_VERSION",
       "type": "STRING",
-      "value": "4.0",
+      "value": "5.0-dev",
       "description": ""
     },
     {
@@ -181,6 +181,12 @@
       "description": ""
     },
     {
+      "name": "RAYGUI_WINDOWBOX_CLOSEBUTTON_HEIGHT",
+      "type": "INT",
+      "value": 18,
+      "description": ""
+    },
+    {
       "name": "RAYGUI_GROUPBOX_LINE_THICK",
       "type": "INT",
       "value": 1,
@@ -223,6 +229,12 @@
       "description": ""
     },
     {
+      "name": "RAYGUI_MIN_MOUSE_WHEEL_SPEED",
+      "type": "INT",
+      "value": 20,
+      "description": ""
+    },
+    {
       "name": "RAYGUI_TOGGLEGROUP_MAX_ITEMS",
       "type": "INT",
       "value": 32,
@@ -231,13 +243,13 @@
     {
       "name": "RAYGUI_TEXTBOX_AUTO_CURSOR_COOLDOWN",
       "type": "INT",
-      "value": 40,
+      "value": 30,
       "description": "Frames to wait for autocursor movement"
     },
     {
       "name": "RAYGUI_TEXTBOX_AUTO_CURSOR_DELAY",
       "type": "INT",
-      "value": 1,
+      "value": 2,
       "description": "Frames delay for autocursor movement"
     },
     {
@@ -766,9 +778,9 @@
           "description": ""
         },
         {
-          "name": "SPINNER",
+          "name": "CONTROL11",
           "value": 11,
-          "description": "Uses: BUTTON, VALUEBOX"
+          "description": ""
         },
         {
           "name": "LISTVIEW",
@@ -1028,6 +1040,16 @@
           "name": "DROPDOWN_ITEMS_SPACING",
           "value": 17,
           "description": "DropdownBox items separation"
+        },
+        {
+          "name": "DROPDOWN_ARROW_HIDDEN",
+          "value": 18,
+          "description": "DropdownBox arrow hidden"
+        },
+        {
+          "name": "DROPDOWN_ROLL_UP",
+          "value": 19,
+          "description": "DropdownBox roll up flag (default rolls down)"
         }
       ]
     },
@@ -1043,16 +1065,16 @@
       ]
     },
     {
-      "name": "GuiSpinnerProperty",
-      "description": "Spinner",
+      "name": "GuiValueBoxProperty",
+      "description": "ValueBox/Spinner",
       "values": [
         {
-          "name": "SPIN_BUTTON_WIDTH",
+          "name": "SPINNER_BUTTON_WIDTH",
           "value": 16,
           "description": "Spinner left/right buttons width"
         },
         {
-          "name": "SPIN_BUTTON_SPACING",
+          "name": "SPINNER_BUTTON_SPACING",
           "value": 17,
           "description": "Spinner buttons separation"
         }
@@ -1081,6 +1103,16 @@
           "name": "SCROLLBAR_SIDE",
           "value": 19,
           "description": "ListView scrollbar side (0-SCROLLBAR_LEFT_SIDE, 1-SCROLLBAR_RIGHT_SIDE)"
+        },
+        {
+          "name": "LIST_ITEMS_BORDER_NORMAL",
+          "value": 20,
+          "description": "ListView items border enabled in normal state"
+        },
+        {
+          "name": "LIST_ITEMS_BORDER_WIDTH",
+          "value": 21,
+          "description": "ListView items border width"
         }
       ]
     },
@@ -2220,72 +2252,72 @@
           "description": ""
         },
         {
-          "name": "ICON_220",
+          "name": "ICON_WARNING",
           "value": 220,
           "description": ""
         },
         {
-          "name": "ICON_221",
+          "name": "ICON_HELP_BOX",
           "value": 221,
           "description": ""
         },
         {
-          "name": "ICON_222",
+          "name": "ICON_INFO_BOX",
           "value": 222,
           "description": ""
         },
         {
-          "name": "ICON_223",
+          "name": "ICON_PRIORITY",
           "value": 223,
           "description": ""
         },
         {
-          "name": "ICON_224",
+          "name": "ICON_LAYERS_ISO",
           "value": 224,
           "description": ""
         },
         {
-          "name": "ICON_225",
+          "name": "ICON_LAYERS2",
           "value": 225,
           "description": ""
         },
         {
-          "name": "ICON_226",
+          "name": "ICON_MLAYERS",
           "value": 226,
           "description": ""
         },
         {
-          "name": "ICON_227",
+          "name": "ICON_MAPS",
           "value": 227,
           "description": ""
         },
         {
-          "name": "ICON_228",
+          "name": "ICON_HOT",
           "value": 228,
           "description": ""
         },
         {
-          "name": "ICON_229",
+          "name": "ICON_LABEL",
           "value": 229,
           "description": ""
         },
         {
-          "name": "ICON_230",
+          "name": "ICON_NAME_ID",
           "value": 230,
           "description": ""
         },
         {
-          "name": "ICON_231",
+          "name": "ICON_SLICING",
           "value": 231,
           "description": ""
         },
         {
-          "name": "ICON_232",
+          "name": "ICON_MANUAL_CONTROL",
           "value": 232,
           "description": ""
         },
         {
-          "name": "ICON_233",
+          "name": "ICON_COLLISION",
           "value": 233,
           "description": ""
         },
@@ -2729,7 +2761,7 @@
     },
     {
       "name": "GuiLabel",
-      "description": "Label control, shows text",
+      "description": "Label control",
       "returnType": "int",
       "params": [
         {
@@ -2759,7 +2791,7 @@
     },
     {
       "name": "GuiLabelButton",
-      "description": "Label button control, show true when clicked",
+      "description": "Label button control, returns true when clicked",
       "returnType": "int",
       "params": [
         {
@@ -2774,7 +2806,7 @@
     },
     {
       "name": "GuiToggle",
-      "description": "Toggle Button control, returns true when active",
+      "description": "Toggle Button control",
       "returnType": "int",
       "params": [
         {
@@ -2793,7 +2825,7 @@
     },
     {
       "name": "GuiToggleGroup",
-      "description": "Toggle Group control, returns active toggle index",
+      "description": "Toggle Group control",
       "returnType": "int",
       "params": [
         {
@@ -2812,7 +2844,7 @@
     },
     {
       "name": "GuiToggleSlider",
-      "description": "Toggle Slider control, returns true when clicked",
+      "description": "Toggle Slider control",
       "returnType": "int",
       "params": [
         {
@@ -2850,7 +2882,7 @@
     },
     {
       "name": "GuiComboBox",
-      "description": "Combo Box control, returns selected item index",
+      "description": "Combo Box control",
       "returnType": "int",
       "params": [
         {
@@ -2869,7 +2901,7 @@
     },
     {
       "name": "GuiDropdownBox",
-      "description": "Dropdown Box control, returns selected item",
+      "description": "Dropdown Box control",
       "returnType": "int",
       "params": [
         {
@@ -2892,7 +2924,7 @@
     },
     {
       "name": "GuiSpinner",
-      "description": "Spinner control, returns selected value",
+      "description": "Spinner control",
       "returnType": "int",
       "params": [
         {
@@ -2953,6 +2985,33 @@
       ]
     },
     {
+      "name": "GuiValueBoxFloat",
+      "description": "Value box control for float values",
+      "returnType": "int",
+      "params": [
+        {
+          "type": "Rectangle",
+          "name": "bounds"
+        },
+        {
+          "type": "const char *",
+          "name": "text"
+        },
+        {
+          "type": "char *",
+          "name": "textValue"
+        },
+        {
+          "type": "float *",
+          "name": "value"
+        },
+        {
+          "type": "bool",
+          "name": "editMode"
+        }
+      ]
+    },
+    {
       "name": "GuiTextBox",
       "description": "Text Box control, updates input text",
       "returnType": "int",
@@ -2977,7 +3036,7 @@
     },
     {
       "name": "GuiSlider",
-      "description": "Slider control, returns selected value",
+      "description": "Slider control",
       "returnType": "int",
       "params": [
         {
@@ -3008,7 +3067,7 @@
     },
     {
       "name": "GuiSliderBar",
-      "description": "Slider Bar control, returns selected value",
+      "description": "Slider Bar control",
       "returnType": "int",
       "params": [
         {
@@ -3039,7 +3098,7 @@
     },
     {
       "name": "GuiProgressBar",
-      "description": "Progress Bar control, shows current progress value",
+      "description": "Progress Bar control",
       "returnType": "int",
       "params": [
         {
@@ -3100,7 +3159,7 @@
     },
     {
       "name": "GuiGrid",
-      "description": "Grid control, returns mouse cell position",
+      "description": "Grid control",
       "returnType": "int",
       "params": [
         {
@@ -3127,7 +3186,7 @@
     },
     {
       "name": "GuiListView",
-      "description": "List View control, returns selected list item index",
+      "description": "List View control",
       "returnType": "int",
       "params": [
         {
@@ -3334,7 +3393,7 @@
     },
     {
       "name": "GuiColorPanelHSV",
-      "description": "Color Panel control that returns HSV color value, used by GuiColorPickerHSV()",
+      "description": "Color Panel control that updates Hue-Saturation-Value color value, used by GuiColorPickerHSV()",
       "returnType": "int",
       "params": [
         {

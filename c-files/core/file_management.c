@@ -147,12 +147,28 @@ mrb_value mrb_get_application_directory(mrb_state *mrb, mrb_value self)
     return mrb_str_new_cstr(mrb, GetApplicationDirectory());
 }
 
+// MakeDirectory
+mrb_value mrb_make_directory(mrb_state *mrb, mrb_value self)
+{
+    const char *path;
+    mrb_get_args(mrb, "z", &path);
+    return mrb_bool_value(MakeDirectory(path));
+}
+
 // IsPathFile
 mrb_value mrb_is_path_file(mrb_state *mrb, mrb_value self)
 {
     const char *path;
     mrb_get_args(mrb, "z", &path);
     return mrb_bool_value(IsPathFile(path));
+}
+
+// IsFileNameValid
+mrb_value mrb_is_file_name_valid(mrb_state *mrb, mrb_value self)
+{
+    const char *path;
+    mrb_get_args(mrb, "z", &path);
+    return mrb_bool_value(IsFileNameValid(path));
 }
 
 // LoadDirectoryFiles
@@ -251,7 +267,9 @@ void mrb_raylib_setup_file_management(mrb_state *mrb, struct RClass *raylib_modu
     mrb_define_module_function(mrb, raylib_module, "get_working_directory", mrb_get_working_directory, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, raylib_module, "get_application_directory", mrb_get_application_directory, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, raylib_module, "change_directory", mrb_change_directory, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "make_directory", mrb_make_directory, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "is_path_file?", mrb_is_path_file, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_file_name_valid?", mrb_is_file_name_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_directory_files", mrb_load_directory_files, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_directory_files_ex", mrb_load_directory_files_ex, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "unload_directory_files", mrb_unload_directory_files, MRB_ARGS_REQ(1));

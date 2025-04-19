@@ -63,6 +63,14 @@ mrb_value mrb_get_char_pressed(mrb_state *mrb, mrb_value self)
     return mrb_int_value(mrb, GetCharPressed());
 }
 
+// GetKeyName
+mrb_value mrb_get_key_name(mrb_state *mrb, mrb_value self)
+{
+    mrb_int key;
+    mrb_get_args(mrb, "i", &key);
+    return mrb_str_new_cstr(mrb, GetKeyName(key));
+}
+
 void mrb_raylib_setup_keyboard(mrb_state *mrb, struct RClass *raylib_module)
 {
     mrb_define_module_function(mrb, raylib_module, "is_key_pressed?", mrb_is_key_pressed, MRB_ARGS_REQ(1));
@@ -73,4 +81,5 @@ void mrb_raylib_setup_keyboard(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "set_exit_key", mrb_set_exit_key, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "get_key_pressed", mrb_get_key_pressed, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, raylib_module, "get_char_pressed", mrb_get_char_pressed, MRB_ARGS_NONE());
+    mrb_define_module_function(mrb, raylib_module, "get_key_name", mrb_get_char_pressed, MRB_ARGS_REQ(1));
 }

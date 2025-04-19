@@ -1,4 +1,5 @@
-## mruby-raylib
+# mruby-raylib
+
 Another mruby binding to raylib. This gem takes a barebones approach at the moment.
 Functions are bound to snake_case. Raylib build for Windows, Linux, WebAssembly, and Android included.
 
@@ -44,7 +45,8 @@ It's not great. But it works for me, and I understand it. If you'd like to help,
 ## Raylib Binaries
 
 There's a pre-built raylib included for various platforms. They were built with all options in config.h enabled, besides the following:
-```
+
+```C
 SUPPORT_TRACELOG_DEBUG
 RLGL_SHOW_GL_DETAILS_INFO
 RLGL_ENABLE_OPENGL_DEBUG_CONTEXT
@@ -58,17 +60,17 @@ and compiled with the following commands on Arch Linux:
 make RAYLIB_MODULE_RAYGUI=TRUE # Linux
 emmake make PLATFORM=PLATFORM_WEB RAYLIB_MODULE_RAYGUI=TRUE # WebAssembly
 make CC=x86_64-w64-mingw32-gcc PLATFORM=PLATFORM_DESKTOP PLATFORM_OS=WINDOWS RAYLIB_MODULE_RAYGUI=TRUE # Windows
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm64 RAYLIB_MODULE_RAYGUI=TRUE # Android aarch64
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm RAYLIB_MODULE_RAYGUI=TRUE # Android armv7a
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86_64 RAYLIB_MODULE_RAYGUI=TRUE # Android X86_64
-make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=33 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86 RAYLIB_MODULE_RAYGUI=TRUE # Android i686
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=34 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm64 RAYLIB_MODULE_RAYGUI=TRUE # Android aarch64
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=34 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=arm RAYLIB_MODULE_RAYGUI=TRUE # Android armv7a
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=34 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86_64 RAYLIB_MODULE_RAYGUI=TRUE # Android X86_64
+make PLATFORM=PLATFORM_ANDROID ANDROID_API_VERSION=34 ANDROID_NDK=/opt/android-sdk/ndk/26.0.10792818 ANDROID_ARCH=x86 RAYLIB_MODULE_RAYGUI=TRUE # Android i686
 ```
 
 ## Notes
 
 The Following Raylib methods are currently not bound:
 
-```
+```C
 WILL NOT IMPLENT
 ----------------
 TextCopy
@@ -115,14 +117,16 @@ UpdateAudioStream
 ```
 
 The following do not perform a function, but are bound, as the GC will handle cleanup:
-```
+
+```C
 UnloadCodepoints
 UnloadWaveSamples
 UnloadRandomSequence
 ```
 
 The following structs can be passed around as references, but you cannot manually read or write attributes of them:
-```
+
+```Ruby
 Mesh
 Shader
 MaterialMap
@@ -143,10 +147,11 @@ RayGUI functions return what the header says it should. For example, GuiToggle w
 Please refer to the raygui.h header to figure out what a given function should return.
 
 The following methods are exceptions to those rules, or have other quirks:
-```
+
+```Ruby
 # These return an array of [return value of function, *(index/active/focus)]
 # Essentially, if the C version usually modifies an int in place, the ruby version
-# returns all the modified ints as an array instead, requring you to manually manage them.
+# returns all the modified ints as an array instead, requiring you to manually manage them.
 GuiTabBar
 GuiDropdownBox 
 GuiValueBox

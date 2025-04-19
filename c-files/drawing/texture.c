@@ -52,12 +52,12 @@ mrb_value mrb_load_render_texture(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsTextureReady
-mrb_value mrb_is_texture_ready(mrb_state *mrb, mrb_value self)
+// IsTextureValid
+mrb_value mrb_is_texture_valid(mrb_state *mrb, mrb_value self)
 {
     Texture *texture;
     mrb_get_args(mrb, "d", &texture, &Raylib_Texture_type);
-    return mrb_bool_value(IsTextureReady(*texture));
+    return mrb_bool_value(IsTextureValid(*texture));
 }
 
 // UnloadTexture
@@ -70,12 +70,12 @@ mrb_value mrb_unload_texture(mrb_state *mrb, mrb_value self)
     return mrb_nil_value();
 }
 
-// IsRenderTextureReady
-mrb_value mrb_is_render_texture_ready(mrb_state *mrb, mrb_value self)
+// IsRenderTextureValid
+mrb_value mrb_is_render_texture_valid(mrb_state *mrb, mrb_value self)
 {
     RenderTexture *target;
     mrb_get_args(mrb, "d", &target, &Raylib_RenderTexture_type);
-    return mrb_bool_value(IsRenderTextureReady(*target));
+    return mrb_bool_value(IsRenderTextureValid(*target));
 }
 
 // UnloadRenderTexture
@@ -210,9 +210,9 @@ void mrb_raylib_setup_texture(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "load_texture_from_image", mrb_load_texture_from_image, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_texture_cubemap", mrb_load_texture_cubemap, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "load_render_texture", mrb_load_render_texture, MRB_ARGS_REQ(2));
-    mrb_define_module_function(mrb, raylib_module, "is_texture_ready?", mrb_is_texture_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_texture_valid?", mrb_is_texture_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_texture", mrb_unload_texture, MRB_ARGS_REQ(1));
-    mrb_define_module_function(mrb, raylib_module, "is_render_texture_ready?", mrb_is_render_texture_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_render_texture_valid?", mrb_is_render_texture_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_render_texture", mrb_unload_render_texture, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "gen_texture_mipmaps", mrb_gen_texture_mipmaps, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "set_texture_filter", mrb_set_texture_filter, MRB_ARGS_REQ(2));

@@ -2,15 +2,31 @@
 // Screen Space Functions
 //-------
 
-// GetMouseRay
-mrb_value mrb_get_mouse_ray(mrb_state *mrb, mrb_value self)
+// GetScreenToWorldRay
+mrb_value mrb_get_screen_to_world_ray(mrb_state *mrb, mrb_value self)
 {
     Vector2 *vector2;
     Camera *camera;
     mrb_get_args(mrb, "dd", &vector2, &Raylib_Vector2_type, &camera, &Raylib_Camera_type);
 
     Ray *ray = (Ray *)malloc(sizeof(Ray));
-    *ray = GetMouseRay(*vector2, *camera);
+    *ray = GetScreenToWorldRay(*vector2, *camera);
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Ray_class, &Raylib_Ray_type, ray));
+
+    return obj;
+}
+
+// GetScreenToWorldRayEx
+mrb_value mrb_get_screen_to_world_ray_ex(mrb_state *mrb, mrb_value self)
+{
+    Vector2 *vector2;
+    Camera *camera;
+    mrb_int width;
+    mrb_int height;
+    mrb_get_args(mrb, "ddii", &vector2, &Raylib_Vector2_type, &camera, &Raylib_Camera_type, &width, &height);
+
+    Ray *ray = (Ray *)malloc(sizeof(Ray));
+    *ray = GetScreenToWorldRayEx(*vector2, *camera, width, height);
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Ray_class, &Raylib_Ray_type, ray));
 
     return obj;
@@ -102,7 +118,8 @@ mrb_value mrb_get_screen_to_world2d(mrb_state *mrb, mrb_value self)
 
 void mrb_raylib_setup_screen_space(mrb_state *mrb, struct RClass *raylib_module)
 {
-    mrb_define_module_function(mrb, raylib_module, "get_mouse_ray", mrb_get_mouse_ray, MRB_ARGS_REQ(2));
+    mrb_define_module_function(mrb, raylib_module, "get_screen_to_world_ray", mrb_get_screen_to_world_ray, MRB_ARGS_REQ(2));
+    mrb_define_module_function(mrb, raylib_module, "get_screen_to_world_ray_ex", mrb_get_screen_to_world_ray_ex, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "get_camera_matrix", mrb_get_camera_matrix, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "get_camera_matrix2d", mrb_get_camera_matrix2D, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "get_world_to_screen", mrb_get_world_to_screen, MRB_ARGS_REQ(2));

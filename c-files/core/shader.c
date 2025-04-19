@@ -28,12 +28,12 @@ mrb_value mrb_load_shader_from_memory(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsShaderReady
-mrb_value mrb_is_shader_ready(mrb_state *mrb, mrb_value self)
+// IsShaderValid
+mrb_value mrb_is_shader_valid(mrb_state *mrb, mrb_value self)
 {
     Shader *shader;
     mrb_get_args(mrb, "d", &shader, &Raylib_Shader_type);
-    return mrb_bool_value(IsShaderReady(*shader));
+    return mrb_bool_value(IsShaderValid(*shader));
 }
 
 // GetShaderLocation
@@ -89,7 +89,7 @@ void mrb_raylib_setup_shader(mrb_state *mrb, struct RClass *raylib_module)
 {
     mrb_define_module_function(mrb, raylib_module, "load_shader", mrb_load_shader, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "load_shader_from_memory", mrb_load_shader_from_memory, MRB_ARGS_REQ(2));
-    mrb_define_module_function(mrb, raylib_module, "is_shader_ready?", mrb_is_shader_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_shader_valid?", mrb_is_shader_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "get_shader_location", mrb_get_shader_location, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "get_shader_location_attrib", mrb_get_shader_location_attrib, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "set_shader_value_matrix", mrb_set_shader_value_matrix, MRB_ARGS_REQ(3));

@@ -191,16 +191,6 @@ module Raylib
       r_texture_set(texture)
       @texture = texture
     end
-
-    alias_method :r_recs, :recs
-    def recs
-      @recs ||= r_recs
-    end
-
-    alias_method :r_glyphs, :glyphs
-    def glyphs
-      @glyphs ||= r_glyphs
-    end
   end
 
   class Camera

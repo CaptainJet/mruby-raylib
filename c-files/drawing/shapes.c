@@ -369,10 +369,9 @@ mrb_value mrb_draw_rectangle_rounded_lines(mrb_state *mrb, mrb_value self)
     Rectangle *rec;
     mrb_float roundness;
     mrb_int segments;
-    mrb_float linethick;
     Color *color;
-    mrb_get_args(mrb, "dfifd", &rec, &Raylib_Rectangle_type, &roundness, &segments, &linethick, &color, &Raylib_Color_type);
-    DrawRectangleRoundedLines(*rec, roundness, segments, linethick, *color);
+    mrb_get_args(mrb, "dfid", &rec, &Raylib_Rectangle_type, &roundness, &segments, &color, &Raylib_Color_type);
+    DrawRectangleRoundedLines(*rec, roundness, segments, *color);
     return mrb_nil_value();
 }
 
@@ -844,7 +843,7 @@ void mrb_raylib_setup_shapes(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "draw_rectangle_lines", mrb_draw_rectangle_lines, MRB_ARGS_REQ(5));
     mrb_define_module_function(mrb, raylib_module, "draw_rectangle_lines_ex", mrb_draw_rectangle_lines_ex, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "draw_rectangle_rounded", mrb_draw_rectangle_rounded, MRB_ARGS_REQ(4));
-    mrb_define_module_function(mrb, raylib_module, "draw_rectangle_rounded_lines", mrb_draw_rectangle_rounded_lines, MRB_ARGS_REQ(5));
+    mrb_define_module_function(mrb, raylib_module, "draw_rectangle_rounded_lines", mrb_draw_rectangle_rounded_lines, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "draw_triangle", mrb_draw_triangle, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "draw_triangle_lines", mrb_draw_triangle_lines, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, raylib_module, "draw_triangle_fan", mrb_draw_triangle_fan, MRB_ARGS_REQ(3));

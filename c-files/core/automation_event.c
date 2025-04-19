@@ -20,7 +20,7 @@ mrb_value mrb_unload_automation_event_list(mrb_state *mrb, mrb_value self)
 {
     AutomationEventList *list;
     mrb_get_args(mrb, "d", &list, &Raylib_AutomationEventList_type);
-    UnloadAutomationEventList(list);
+    UnloadAutomationEventList(*list);
     return mrb_nil_value();
 }
 

@@ -16,12 +16,12 @@ mrb_value mrb_load_audio_stream(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsAudioStreamReady
-mrb_value mrb_is_audio_stream_ready(mrb_state *mrb, mrb_value self)
+// IsAudioStreamValid
+mrb_value mrb_is_audio_stream_valid(mrb_state *mrb, mrb_value self)
 {
     AudioStream *audiostream;
     mrb_get_args(mrb, "d", &audiostream, &Raylib_AudioStream_type);
-    return mrb_bool_value(IsAudioStreamReady(*audiostream));
+    return mrb_bool_value(IsAudioStreamValid(*audiostream));
 }
 
 // UnloadAudioStream
@@ -127,7 +127,7 @@ mrb_value mrb_set_audio_stream_buffer_size_default(mrb_state *mrb, mrb_value sel
 void mrb_raylib_setup_audiostream_management(mrb_state *mrb, struct RClass *raylib_module)
 {
     mrb_define_module_function(mrb, raylib_module, "load_audio_stream", mrb_load_audio_stream, MRB_ARGS_REQ(3));
-    mrb_define_module_function(mrb, raylib_module, "is_audio_stream_ready?", mrb_is_audio_stream_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_audio_stream_valid?", mrb_is_audio_stream_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_audio_stream", mrb_unload_audio_stream, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "is_audio_stream_processed?", mrb_is_audio_stream_processed, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "play_audio_stream", mrb_play_audio_stream, MRB_ARGS_REQ(1));

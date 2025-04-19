@@ -36,7 +36,7 @@ void mrb_free_raylib_image(mrb_state *mrb, void *ptr)
     UnloadImage(*image);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_Image_type = {"Image", mrb_free_raylib_image};
+mrb_data_type Raylib_Image_type = {"Image", mrb_free};
 struct RClass *Raylib_Image_class;
 
 void mrb_free_raylib_texture(mrb_state *mrb, void *ptr)
@@ -45,7 +45,7 @@ void mrb_free_raylib_texture(mrb_state *mrb, void *ptr)
     UnloadTexture(*texture);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_Texture_type = {"Texture", mrb_free_raylib_texture};
+mrb_data_type Raylib_Texture_type = {"Texture", mrb_free};
 struct RClass *Raylib_Texture_class;
 
 void mrb_free_raylib_rendertexture(mrb_state *mrb, void *ptr)
@@ -54,7 +54,7 @@ void mrb_free_raylib_rendertexture(mrb_state *mrb, void *ptr)
     UnloadRenderTexture(*rendertexture);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_RenderTexture_type = {"RenderTexture", mrb_free_raylib_rendertexture};
+mrb_data_type Raylib_RenderTexture_type = {"RenderTexture", mrb_free};
 struct RClass *Raylib_RenderTexture_class;
 
 mrb_data_type Raylib_NPatchInfo_type = {"NPatchInfo", mrb_free};
@@ -69,7 +69,7 @@ void mrb_free_raylib_font(mrb_state *mrb, void *ptr)
     UnloadFont(*font);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_Font_type = {"Font", mrb_free_raylib_font};
+mrb_data_type Raylib_Font_type = {"Font", mrb_free};
 struct RClass *Raylib_Font_class;
 
 mrb_data_type Raylib_Camera_type = {"Camera", mrb_free};
@@ -153,7 +153,7 @@ void mrb_free_raylib_wave(mrb_state *mrb, void *ptr)
     UnloadWave(*wave);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_Wave_type = {"Wave", mrb_free_raylib_wave};
+mrb_data_type Raylib_Wave_type = {"Wave", mrb_free};
 struct RClass *Raylib_Wave_class;
 
 void mrb_free_raylib_sound(mrb_state *mrb, void *ptr)
@@ -162,7 +162,7 @@ void mrb_free_raylib_sound(mrb_state *mrb, void *ptr)
     UnloadSound(*sound);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_Sound_type = {"Sound", mrb_free_raylib_sound};
+mrb_data_type Raylib_Sound_type = {"Sound", mrb_free};
 struct RClass *Raylib_Sound_class;
 
 void mrb_free_raylib_music(mrb_state *mrb, void *ptr)
@@ -171,7 +171,7 @@ void mrb_free_raylib_music(mrb_state *mrb, void *ptr)
     UnloadMusicStream(*music);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_Music_type = {"Music", mrb_free_raylib_music};
+mrb_data_type Raylib_Music_type = {"Music", mrb_free};
 struct RClass *Raylib_Music_class;
 
 mrb_data_type Raylib_AudioStream_type = {"AudioStream", mrb_free};
@@ -186,7 +186,7 @@ void mrb_free_raylib_vrstreoconfig(mrb_state *mrb, void *ptr)
     UnloadVrStereoConfig(*vrstreoconfig);
     mrb_free(mrb, ptr);
 }
-mrb_data_type Raylib_VrStereoConfig_type = {"VrStereoConfig", mrb_free_raylib_vrstreoconfig};
+mrb_data_type Raylib_VrStereoConfig_type = {"VrStereoConfig", mrb_free};
 struct RClass *Raylib_VrStereoConfig_class;
 
 //-----------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ struct RClass *Raylib_AutomationEvent_class;
 void mrb_free_raylib_automation_event_list(mrb_state *mrb, void *ptr)
 {
     AutomationEventList *list = (AutomationEventList *)ptr;
-    UnloadAutomationEventList(list);
+    UnloadAutomationEventList(*list);
     mrb_free(mrb, ptr);
 }
 mrb_data_type Raylib_AutomationEventList_type = {"AutomationEventList", mrb_free_raylib_automation_event_list};
@@ -238,7 +238,8 @@ mrb_value mrb_Vector2_set_x(mrb_state *mrb, mrb_value self)
 {
     mrb_int x;
     mrb_get_args(mrb, "i", &x);
-    Vector2 *vector2 = (Vector2 *)DATA_PTR(self);
+    Vector2 *vector2;
+    Data_Get_Struct(mrb, self, &Raylib_Vector2_type, vector2);
     vector2->x = x;
     return mrb_nil_value();
 }
@@ -247,20 +248,23 @@ mrb_value mrb_Vector2_set_y(mrb_state *mrb, mrb_value self)
 {
     mrb_int y;
     mrb_get_args(mrb, "i", &y);
-    Vector2 *vector2 = (Vector2 *)DATA_PTR(self);
+    Vector2 *vector2;
+    Data_Get_Struct(mrb, self, &Raylib_Vector2_type, vector2);
     vector2->y = y;
     return mrb_nil_value();
 }
 
 mrb_value mrb_Vector2_get_x(mrb_state *mrb, mrb_value self)
 {
-    Vector2 *vector2 = (Vector2 *)DATA_PTR(self);
+    Vector2 *vector2;
+    Data_Get_Struct(mrb, self, &Raylib_Vector2_type, vector2);
     return mrb_int_value(mrb, vector2->x);
 }
 
 mrb_value mrb_Vector2_get_y(mrb_state *mrb, mrb_value self)
 {
-    Vector2 *vector2 = (Vector2 *)DATA_PTR(self);
+    Vector2 *vector2;
+    Data_Get_Struct(mrb, self, &Raylib_Vector2_type, vector2);
     return mrb_int_value(mrb, vector2->y);
 }
 
@@ -289,7 +293,8 @@ mrb_value mrb_Vector3_set_x(mrb_state *mrb, mrb_value self)
 {
     mrb_int x;
     mrb_get_args(mrb, "i", &x);
-    Vector3 *vector3 = (Vector3 *)DATA_PTR(self);
+    Vector3 *vector3;
+    Data_Get_Struct(mrb, self, &Raylib_Vector3_type, vector3);
     vector3->x = x;
     return mrb_nil_value();
 }
@@ -298,7 +303,8 @@ mrb_value mrb_Vector3_set_y(mrb_state *mrb, mrb_value self)
 {
     mrb_int y;
     mrb_get_args(mrb, "i", &y);
-    Vector3 *vector3 = (Vector3 *)DATA_PTR(self);
+    Vector3 *vector3;
+    Data_Get_Struct(mrb, self, &Raylib_Vector3_type, vector3);
     vector3->y = y;
     return mrb_nil_value();
 }
@@ -307,26 +313,30 @@ mrb_value mrb_Vector3_set_z(mrb_state *mrb, mrb_value self)
 {
     mrb_int z;
     mrb_get_args(mrb, "i", &z);
-    Vector3 *vector3 = (Vector3 *)DATA_PTR(self);
+    Vector3 *vector3;
+    Data_Get_Struct(mrb, self, &Raylib_Vector3_type, vector3);
     vector3->z = z;
     return mrb_nil_value();
 }
 
 mrb_value mrb_Vector3_get_x(mrb_state *mrb, mrb_value self)
 {
-    Vector3 *vector3 = (Vector3 *)DATA_PTR(self);
+    Vector3 *vector3;
+    Data_Get_Struct(mrb, self, &Raylib_Vector3_type, vector3);
     return mrb_int_value(mrb, vector3->x);
 }
 
 mrb_value mrb_Vector3_get_y(mrb_state *mrb, mrb_value self)
 {
-    Vector3 *vector3 = (Vector3 *)DATA_PTR(self);
+    Vector3 *vector3;
+    Data_Get_Struct(mrb, self, &Raylib_Vector3_type, vector3);
     return mrb_int_value(mrb, vector3->y);
 }
 
 mrb_value mrb_Vector3_get_z(mrb_state *mrb, mrb_value self)
 {
-    Vector3 *vector3 = (Vector3 *)DATA_PTR(self);
+    Vector3 *vector3;
+    Data_Get_Struct(mrb, self, &Raylib_Vector3_type, vector3);
     return mrb_int_value(mrb, vector3->z);
 }
 
@@ -356,7 +366,8 @@ mrb_value mrb_Vector4_set_x(mrb_state *mrb, mrb_value self)
 {
     mrb_int x;
     mrb_get_args(mrb, "i", &x);
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     vector4->x = x;
     return mrb_nil_value();
 }
@@ -365,7 +376,8 @@ mrb_value mrb_Vector4_set_y(mrb_state *mrb, mrb_value self)
 {
     mrb_int y;
     mrb_get_args(mrb, "i", &y);
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     vector4->y = y;
     return mrb_nil_value();
 }
@@ -374,7 +386,8 @@ mrb_value mrb_Vector4_set_z(mrb_state *mrb, mrb_value self)
 {
     mrb_int z;
     mrb_get_args(mrb, "i", &z);
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     vector4->z = z;
     return mrb_nil_value();
 }
@@ -383,32 +396,37 @@ mrb_value mrb_Vector4_set_w(mrb_state *mrb, mrb_value self)
 {
     mrb_int w;
     mrb_get_args(mrb, "i", &w);
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     vector4->w = w;
     return mrb_nil_value();
 }
 
 mrb_value mrb_Vector4_get_x(mrb_state *mrb, mrb_value self)
 {
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     return mrb_int_value(mrb, vector4->x);
 }
 
 mrb_value mrb_Vector4_get_y(mrb_state *mrb, mrb_value self)
 {
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     return mrb_int_value(mrb, vector4->y);
 }
 
 mrb_value mrb_Vector4_get_z(mrb_state *mrb, mrb_value self)
 {
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     return mrb_int_value(mrb, vector4->z);
 }
 
 mrb_value mrb_Vector4_get_w(mrb_state *mrb, mrb_value self)
 {
-    Vector4 *vector4 = (Vector4 *)DATA_PTR(self);
+    Vector4 *vector4;
+    Data_Get_Struct(mrb, self, &Raylib_Vector4_type, vector4);
     return mrb_int_value(mrb, vector4->w);
 }
 
@@ -450,7 +468,8 @@ mrb_value mrb_Matrix_set_m0(mrb_state *mrb, mrb_value self)
 {
     mrb_int m0;
     mrb_get_args(mrb, "i", &m0);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m0 = m0;
     return mrb_nil_value();
 }
@@ -459,7 +478,8 @@ mrb_value mrb_Matrix_set_m1(mrb_state *mrb, mrb_value self)
 {
     mrb_int m1;
     mrb_get_args(mrb, "i", &m1);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m1 = m1;
     return mrb_nil_value();
 }
@@ -468,7 +488,8 @@ mrb_value mrb_Matrix_set_m2(mrb_state *mrb, mrb_value self)
 {
     mrb_int m2;
     mrb_get_args(mrb, "i", &m2);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m2 = m2;
     return mrb_nil_value();
 }
@@ -477,7 +498,8 @@ mrb_value mrb_Matrix_set_m3(mrb_state *mrb, mrb_value self)
 {
     mrb_int m3;
     mrb_get_args(mrb, "i", &m3);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m3 = m3;
     return mrb_nil_value();
 }
@@ -486,7 +508,8 @@ mrb_value mrb_Matrix_set_m4(mrb_state *mrb, mrb_value self)
 {
     mrb_int m4;
     mrb_get_args(mrb, "i", &m4);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m4 = m4;
     return mrb_nil_value();
 }
@@ -495,7 +518,8 @@ mrb_value mrb_Matrix_set_m5(mrb_state *mrb, mrb_value self)
 {
     mrb_int m5;
     mrb_get_args(mrb, "i", &m5);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m5 = m5;
     return mrb_nil_value();
 }
@@ -504,7 +528,8 @@ mrb_value mrb_Matrix_set_m6(mrb_state *mrb, mrb_value self)
 {
     mrb_int m6;
     mrb_get_args(mrb, "i", &m6);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m6 = m6;
     return mrb_nil_value();
 }
@@ -513,7 +538,8 @@ mrb_value mrb_Matrix_set_m7(mrb_state *mrb, mrb_value self)
 {
     mrb_int m7;
     mrb_get_args(mrb, "i", &m7);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m7 = m7;
     return mrb_nil_value();
 }
@@ -522,7 +548,8 @@ mrb_value mrb_Matrix_set_m8(mrb_state *mrb, mrb_value self)
 {
     mrb_int m8;
     mrb_get_args(mrb, "i", &m8);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m8 = m8;
     return mrb_nil_value();
 }
@@ -531,7 +558,8 @@ mrb_value mrb_Matrix_set_m9(mrb_state *mrb, mrb_value self)
 {
     mrb_int m9;
     mrb_get_args(mrb, "i", &m9);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m9 = m9;
     return mrb_nil_value();
 }
@@ -540,7 +568,8 @@ mrb_value mrb_Matrix_set_m10(mrb_state *mrb, mrb_value self)
 {
     mrb_int m10;
     mrb_get_args(mrb, "i", &m10);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m10 = m10;
     return mrb_nil_value();
 }
@@ -549,7 +578,8 @@ mrb_value mrb_Matrix_set_m11(mrb_state *mrb, mrb_value self)
 {
     mrb_int m11;
     mrb_get_args(mrb, "i", &m11);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m11 = m11;
     return mrb_nil_value();
 }
@@ -558,7 +588,8 @@ mrb_value mrb_Matrix_set_m12(mrb_state *mrb, mrb_value self)
 {
     mrb_int m12;
     mrb_get_args(mrb, "i", &m12);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m12 = m12;
     return mrb_nil_value();
 }
@@ -567,7 +598,8 @@ mrb_value mrb_Matrix_set_m13(mrb_state *mrb, mrb_value self)
 {
     mrb_int m13;
     mrb_get_args(mrb, "i", &m13);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m13 = m13;
     return mrb_nil_value();
 }
@@ -576,7 +608,8 @@ mrb_value mrb_Matrix_set_m14(mrb_state *mrb, mrb_value self)
 {
     mrb_int m14;
     mrb_get_args(mrb, "i", &m14);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m14 = m14;
     return mrb_nil_value();
 }
@@ -585,104 +618,121 @@ mrb_value mrb_Matrix_set_m15(mrb_state *mrb, mrb_value self)
 {
     mrb_int m15;
     mrb_get_args(mrb, "i", &m15);
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     matrix->m15 = m15;
     return mrb_nil_value();
 }
 
 mrb_value mrb_Matrix_get_m0(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m0);
 }
 
 mrb_value mrb_Matrix_get_m1(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m1);
 }
 
 mrb_value mrb_Matrix_get_m2(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m2);
 }
 
 mrb_value mrb_Matrix_get_m3(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m3);
 }
 
 mrb_value mrb_Matrix_get_m4(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m4);
 }
 
 mrb_value mrb_Matrix_get_m5(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m5);
 }
 
 mrb_value mrb_Matrix_get_m6(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m6);
 }
 
 mrb_value mrb_Matrix_get_m7(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m7);
 }
 
 mrb_value mrb_Matrix_get_m8(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m8);
 }
 
 mrb_value mrb_Matrix_get_m9(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m9);
 }
 
 mrb_value mrb_Matrix_get_m10(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m10);
 }
 
 mrb_value mrb_Matrix_get_m11(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m11);
 }
 
 mrb_value mrb_Matrix_get_m12(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m12);
 }
 
 mrb_value mrb_Matrix_get_m13(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m13);
 }
 
 mrb_value mrb_Matrix_get_m14(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m14);
 }
 
 mrb_value mrb_Matrix_get_m15(mrb_state *mrb, mrb_value self)
 {
-    Matrix *matrix = (Matrix *)DATA_PTR(self);
+    Matrix *matrix;
+    Data_Get_Struct(mrb, self, &Raylib_Matrix_type, matrix);
     return mrb_int_value(mrb, matrix->m15);
 }
 
@@ -710,25 +760,29 @@ mrb_value mrb_Color_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Color_get_r(mrb_state *mrb, mrb_value self)
 {
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     return mrb_int_value(mrb, color->r);
 }
 
 mrb_value mrb_Color_get_g(mrb_state *mrb, mrb_value self)
 {
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     return mrb_int_value(mrb, color->g);
 }
 
 mrb_value mrb_Color_get_b(mrb_state *mrb, mrb_value self)
 {
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     return mrb_int_value(mrb, color->b);
 }
 
 mrb_value mrb_Color_get_a(mrb_state *mrb, mrb_value self)
 {
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     return mrb_int_value(mrb, color->a);
 }
 
@@ -736,7 +790,8 @@ mrb_value mrb_Color_set_r(mrb_state *mrb, mrb_value self)
 {
     mrb_int r;
     mrb_get_args(mrb, "i", &r);
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     color->r = r;
     return mrb_nil_value();
 }
@@ -745,7 +800,8 @@ mrb_value mrb_Color_set_g(mrb_state *mrb, mrb_value self)
 {
     mrb_int g;
     mrb_get_args(mrb, "i", &g);
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     color->g = g;
     return mrb_nil_value();
 }
@@ -754,7 +810,8 @@ mrb_value mrb_Color_set_b(mrb_state *mrb, mrb_value self)
 {
     mrb_int b;
     mrb_get_args(mrb, "i", &b);
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     color->b = b;
     return mrb_nil_value();
 }
@@ -763,7 +820,8 @@ mrb_value mrb_Color_set_a(mrb_state *mrb, mrb_value self)
 {
     mrb_int a;
     mrb_get_args(mrb, "i", &a);
-    Color *color = (Color *)DATA_PTR(self);
+    Color *color;
+    Data_Get_Struct(mrb, self, &Raylib_Color_type, color);
     color->a = a;
     return mrb_nil_value();
 }
@@ -794,7 +852,8 @@ mrb_value mrb_Rectangle_set_x(mrb_state *mrb, mrb_value self)
 {
     mrb_float x;
     mrb_get_args(mrb, "f", &x);
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     rectangle->x = x;
     return mrb_nil_value();
 }
@@ -803,7 +862,8 @@ mrb_value mrb_Rectangle_set_y(mrb_state *mrb, mrb_value self)
 {
     mrb_float y;
     mrb_get_args(mrb, "f", &y);
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     rectangle->y = y;
     return mrb_nil_value();
 }
@@ -812,7 +872,8 @@ mrb_value mrb_Rectangle_set_width(mrb_state *mrb, mrb_value self)
 {
     mrb_float width;
     mrb_get_args(mrb, "f", &width);
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     rectangle->width = width;
     return mrb_nil_value();
 }
@@ -821,32 +882,37 @@ mrb_value mrb_Rectangle_set_height(mrb_state *mrb, mrb_value self)
 {
     mrb_float height;
     mrb_get_args(mrb, "f", &height);
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     rectangle->height = height;
     return mrb_nil_value();
 }
 
 mrb_value mrb_Rectangle_get_x(mrb_state *mrb, mrb_value self)
 {
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     return mrb_float_value(mrb, rectangle->x);
 }
 
 mrb_value mrb_Rectangle_get_y(mrb_state *mrb, mrb_value self)
 {
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     return mrb_float_value(mrb, rectangle->y);
 }
 
 mrb_value mrb_Rectangle_get_width(mrb_state *mrb, mrb_value self)
 {
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     return mrb_float_value(mrb, rectangle->width);
 }
 
 mrb_value mrb_Rectangle_get_height(mrb_state *mrb, mrb_value self)
 {
-    Rectangle *rectangle = (Rectangle *)DATA_PTR(self);
+    Rectangle *rectangle;
+    Data_Get_Struct(mrb, self, &Raylib_Rectangle_type, rectangle);
     return mrb_float_value(mrb, rectangle->height);
 }
 
@@ -874,25 +940,29 @@ mrb_value mrb_Image_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Image_get_width(mrb_state *mrb, mrb_value self)
 {
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     return mrb_int_value(mrb, image->width);
 }
 
 mrb_value mrb_Image_get_height(mrb_state *mrb, mrb_value self)
 {
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     return mrb_int_value(mrb, image->height);
 }
 
 mrb_value mrb_Image_get_mipmaps(mrb_state *mrb, mrb_value self)
 {
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     return mrb_int_value(mrb, image->mipmaps);
 }
 
 mrb_value mrb_Image_get_format(mrb_state *mrb, mrb_value self)
 {
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     return mrb_int_value(mrb, image->format);
 }
 
@@ -900,7 +970,8 @@ mrb_value mrb_Image_set_width(mrb_state *mrb, mrb_value self)
 {
     mrb_int width;
     mrb_get_args(mrb, "i", &width);
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     image->width = width;
     return mrb_nil_value();
 }
@@ -909,7 +980,8 @@ mrb_value mrb_Image_set_height(mrb_state *mrb, mrb_value self)
 {
     mrb_int height;
     mrb_get_args(mrb, "i", &height);
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     image->height = height;
     return mrb_nil_value();
 }
@@ -918,7 +990,8 @@ mrb_value mrb_Image_set_mipmaps(mrb_state *mrb, mrb_value self)
 {
     mrb_int mipmaps;
     mrb_get_args(mrb, "i", &mipmaps);
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     image->mipmaps = mipmaps;
     return mrb_nil_value();
 }
@@ -927,7 +1000,8 @@ mrb_value mrb_Image_set_format(mrb_state *mrb, mrb_value self)
 {
     mrb_int format;
     mrb_get_args(mrb, "i", &format);
-    Image *image = (Image *)DATA_PTR(self);
+    Image *image;
+    Data_Get_Struct(mrb, self, &Raylib_Image_type, image);
     image->format = format;
     return mrb_nil_value();
 }
@@ -957,31 +1031,36 @@ mrb_value mrb_Texture_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Texture_get_id(mrb_state *mrb, mrb_value self)
 {
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     return mrb_int_value(mrb, texture->id);
 }
 
 mrb_value mrb_Texture_get_width(mrb_state *mrb, mrb_value self)
 {
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     return mrb_int_value(mrb, texture->width);
 }
 
 mrb_value mrb_Texture_get_height(mrb_state *mrb, mrb_value self)
 {
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     return mrb_int_value(mrb, texture->height);
 }
 
 mrb_value mrb_Texture_get_mipmaps(mrb_state *mrb, mrb_value self)
 {
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     return mrb_int_value(mrb, texture->mipmaps);
 }
 
 mrb_value mrb_Texture_get_format(mrb_state *mrb, mrb_value self)
 {
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     return mrb_int_value(mrb, texture->format);
 }
 
@@ -989,7 +1068,8 @@ mrb_value mrb_Texture_set_id(mrb_state *mrb, mrb_value self)
 {
     mrb_int id;
     mrb_get_args(mrb, "i", &id);
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     texture->id = id;
     return mrb_nil_value();
 }
@@ -998,7 +1078,8 @@ mrb_value mrb_Texture_set_width(mrb_state *mrb, mrb_value self)
 {
     mrb_int width;
     mrb_get_args(mrb, "i", &width);
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     texture->width = width;
     return mrb_nil_value();
 }
@@ -1007,7 +1088,8 @@ mrb_value mrb_Texture_set_height(mrb_state *mrb, mrb_value self)
 {
     mrb_int height;
     mrb_get_args(mrb, "i", &height);
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     texture->height = height;
     return mrb_nil_value();
 }
@@ -1016,7 +1098,8 @@ mrb_value mrb_Texture_set_mipmaps(mrb_state *mrb, mrb_value self)
 {
     mrb_int mipmaps;
     mrb_get_args(mrb, "i", &mipmaps);
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     texture->mipmaps = mipmaps;
     return mrb_nil_value();
 }
@@ -1025,7 +1108,8 @@ mrb_value mrb_Texture_set_format(mrb_state *mrb, mrb_value self)
 {
     mrb_int format;
     mrb_get_args(mrb, "i", &format);
-    Texture *texture = (Texture *)DATA_PTR(self);
+    Texture *texture;
+    Data_Get_Struct(mrb, self, &Raylib_Texture_type, texture);
     texture->format = format;
     return mrb_nil_value();
 }
@@ -1055,13 +1139,15 @@ mrb_value mrb_RenderTexture_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_RenderTexture_get_id(mrb_state *mrb, mrb_value self)
 {
-    RenderTexture *rendertexture = (RenderTexture *)DATA_PTR(self);
+    RenderTexture *rendertexture;
+    Data_Get_Struct(mrb, self, &Raylib_RenderTexture_type, rendertexture);
     return mrb_int_value(mrb, rendertexture->id);
 }
 
 mrb_value mrb_RenderTexture_get_texture(mrb_state *mrb, mrb_value self)
 {
-    RenderTexture *rendertexture = (RenderTexture *)DATA_PTR(self);
+    RenderTexture *rendertexture;
+    Data_Get_Struct(mrb, self, &Raylib_RenderTexture_type, rendertexture);
     Texture *texture = (Texture *)mrb_malloc(mrb, sizeof(Texture));
     *texture = rendertexture->texture;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Texture_class, &Raylib_Texture_type, texture));
@@ -1070,7 +1156,8 @@ mrb_value mrb_RenderTexture_get_texture(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_RenderTexture_get_depth(mrb_state *mrb, mrb_value self)
 {
-    RenderTexture *rendertexture = (RenderTexture *)DATA_PTR(self);
+    RenderTexture *rendertexture;
+    Data_Get_Struct(mrb, self, &Raylib_RenderTexture_type, rendertexture);
     Texture *depth = (Texture *)mrb_malloc(mrb, sizeof(Texture));
     *depth = rendertexture->depth;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Texture_class, &Raylib_Texture_type, depth));
@@ -1081,7 +1168,8 @@ mrb_value mrb_RenderTexture_set_id(mrb_state *mrb, mrb_value self)
 {
     mrb_int id;
     mrb_get_args(mrb, "i", &id);
-    RenderTexture *rendertexture = (RenderTexture *)DATA_PTR(self);
+    RenderTexture *rendertexture;
+    Data_Get_Struct(mrb, self, &Raylib_RenderTexture_type, rendertexture);
     rendertexture->id = id;
     return mrb_nil_value();
 }
@@ -1090,7 +1178,8 @@ mrb_value mrb_RenderTexture_set_texture(mrb_state *mrb, mrb_value self)
 {
     Texture *texture;
     mrb_get_args(mrb, "d", &texture, &Raylib_Texture_type);
-    RenderTexture *rendertexture = (RenderTexture *)DATA_PTR(self);
+    RenderTexture *rendertexture;
+    Data_Get_Struct(mrb, self, &Raylib_RenderTexture_type, rendertexture);
     rendertexture->texture = *texture;
     return mrb_nil_value();
 }
@@ -1099,7 +1188,8 @@ mrb_value mrb_RenderTexture_set_depth(mrb_state *mrb, mrb_value self)
 {
     Texture *depth;
     mrb_get_args(mrb, "d", &depth, &Raylib_Texture_type);
-    RenderTexture *rendertexture = (RenderTexture *)DATA_PTR(self);
+    RenderTexture *rendertexture;
+    Data_Get_Struct(mrb, self, &Raylib_RenderTexture_type, rendertexture);
     rendertexture->depth = *depth;
     return mrb_nil_value();
 }
@@ -1131,37 +1221,43 @@ mrb_value mrb_NPatchInfo_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_NPatchInfo_get_left(mrb_state *mrb, mrb_value self)
 {
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     return mrb_int_value(mrb, npatchinfo->left);
 }
 
 mrb_value mrb_NPatchInfo_get_top(mrb_state *mrb, mrb_value self)
 {
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     return mrb_int_value(mrb, npatchinfo->top);
 }
 
 mrb_value mrb_NPatchInfo_get_right(mrb_state *mrb, mrb_value self)
 {
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     return mrb_int_value(mrb, npatchinfo->right);
 }
 
 mrb_value mrb_NPatchInfo_get_bottom(mrb_state *mrb, mrb_value self)
 {
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     return mrb_int_value(mrb, npatchinfo->bottom);
 }
 
 mrb_value mrb_NPatchInfo_get_layout(mrb_state *mrb, mrb_value self)
 {
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     return mrb_int_value(mrb, npatchinfo->layout);
 }
 
 mrb_value mrb_NPatchInfo_get_source(mrb_state *mrb, mrb_value self)
 {
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     Rectangle *rectangle = (Rectangle *)mrb_malloc(mrb, sizeof(Rectangle));
     *rectangle = npatchinfo->source;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Rectangle_class, &Raylib_Rectangle_type, rectangle));
@@ -1172,7 +1268,8 @@ mrb_value mrb_NPatchInfo_set_source(mrb_state *mrb, mrb_value self)
 {
     Rectangle *rectangle;
     mrb_get_args(mrb, "d", &rectangle, &Raylib_Rectangle_type);
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     npatchinfo->source = *rectangle;
     return mrb_nil_value();
 }
@@ -1181,7 +1278,8 @@ mrb_value mrb_NPatchInfo_set_left(mrb_state *mrb, mrb_value self)
 {
     mrb_int left;
     mrb_get_args(mrb, "i", &left);
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     npatchinfo->left = left;
     return mrb_nil_value();
 }
@@ -1190,7 +1288,8 @@ mrb_value mrb_NPatchInfo_set_top(mrb_state *mrb, mrb_value self)
 {
     mrb_int top;
     mrb_get_args(mrb, "i", &top);
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     npatchinfo->top = top;
     return mrb_nil_value();
 }
@@ -1199,7 +1298,8 @@ mrb_value mrb_NPatchInfo_set_right(mrb_state *mrb, mrb_value self)
 {
     mrb_int right;
     mrb_get_args(mrb, "i", &right);
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     npatchinfo->right = right;
     return mrb_nil_value();
 }
@@ -1208,7 +1308,8 @@ mrb_value mrb_NPatchInfo_set_bottom(mrb_state *mrb, mrb_value self)
 {
     mrb_int bottom;
     mrb_get_args(mrb, "i", &bottom);
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     npatchinfo->bottom = bottom;
     return mrb_nil_value();
 }
@@ -1217,7 +1318,8 @@ mrb_value mrb_NPatchInfo_set_layout(mrb_state *mrb, mrb_value self)
 {
     mrb_int layout;
     mrb_get_args(mrb, "i", &layout);
-    NPatchInfo *npatchinfo = (NPatchInfo *)DATA_PTR(self);
+    NPatchInfo *npatchinfo;
+    Data_Get_Struct(mrb, self, &Raylib_NPatchInfo_type, npatchinfo);
     npatchinfo->layout = layout;
     return mrb_nil_value();
 }
@@ -1248,31 +1350,36 @@ mrb_value mrb_GlyphInfo_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_GlyphInfo_get_value(mrb_state *mrb, mrb_value self)
 {
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     return mrb_int_value(mrb, glyphinfo->value);
 }
 
 mrb_value mrb_GlyphInfo_get_advanceX(mrb_state *mrb, mrb_value self)
 {
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     return mrb_int_value(mrb, glyphinfo->advanceX);
 }
 
 mrb_value mrb_GlyphInfo_get_offsetX(mrb_state *mrb, mrb_value self)
 {
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     return mrb_int_value(mrb, glyphinfo->offsetX);
 }
 
 mrb_value mrb_GlyphInfo_get_offsetY(mrb_state *mrb, mrb_value self)
 {
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     return mrb_int_value(mrb, glyphinfo->offsetY);
 }
 
 mrb_value mrb_GlyphInfo_get_image(mrb_state *mrb, mrb_value self)
 {
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     Image *image = (Image *)mrb_malloc(mrb, sizeof(Image));
     *image = glyphinfo->image;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Image_class, &Raylib_Image_type, image));
@@ -1283,7 +1390,8 @@ mrb_value mrb_GlyphInfo_set_image(mrb_state *mrb, mrb_value self)
 {
     Image *image;
     mrb_get_args(mrb, "d", &image, &Raylib_Image_type);
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     glyphinfo->image = *image;
     return mrb_nil_value();
 }
@@ -1292,7 +1400,8 @@ mrb_value mrb_GlyphInfo_set_value(mrb_state *mrb, mrb_value self)
 {
     mrb_int value;
     mrb_get_args(mrb, "i", &value);
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     glyphinfo->value = value;
     return mrb_nil_value();
 }
@@ -1301,7 +1410,8 @@ mrb_value mrb_GlyphInfo_set_advanceX(mrb_state *mrb, mrb_value self)
 {
     mrb_int advanceX;
     mrb_get_args(mrb, "i", &advanceX);
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     glyphinfo->advanceX = advanceX;
     return mrb_nil_value();
 }
@@ -1310,7 +1420,8 @@ mrb_value mrb_GlyphInfo_set_offsetX(mrb_state *mrb, mrb_value self)
 {
     mrb_int offsetX;
     mrb_get_args(mrb, "i", &offsetX);
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     glyphinfo->offsetX = offsetX;
     return mrb_nil_value();
 }
@@ -1319,7 +1430,8 @@ mrb_value mrb_GlyphInfo_set_offsetY(mrb_state *mrb, mrb_value self)
 {
     mrb_int offsetY;
     mrb_get_args(mrb, "i", &offsetY);
-    GlyphInfo *glyphinfo = (GlyphInfo *)DATA_PTR(self);
+    GlyphInfo *glyphinfo;
+    Data_Get_Struct(mrb, self, &Raylib_GlyphInfo_type, glyphinfo);
     glyphinfo->offsetY = offsetY;
     return mrb_nil_value();
 }
@@ -1358,25 +1470,29 @@ mrb_value mrb_Font_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Font_get_baseSize(mrb_state *mrb, mrb_value self)
 {
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     return mrb_int_value(mrb, font->baseSize);
 }
 
 mrb_value mrb_Font_get_glyphCount(mrb_state *mrb, mrb_value self)
 {
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     return mrb_int_value(mrb, font->glyphCount);
 }
 
 mrb_value mrb_Font_get_glyphPadding(mrb_state *mrb, mrb_value self)
 {
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     return mrb_int_value(mrb, font->glyphPadding);
 }
 
 mrb_value mrb_Font_get_texture(mrb_state *mrb, mrb_value self)
 {
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     Texture *texture = (Texture *)mrb_malloc(mrb, sizeof(Texture));
     *texture = font->texture;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Texture_class, &Raylib_Texture_type, texture));
@@ -1385,7 +1501,8 @@ mrb_value mrb_Font_get_texture(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Font_get_recs(mrb_state *mrb, mrb_value self)
 {
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     mrb_value ary = mrb_ary_new(mrb);
     Rectangle *rectangles = font->recs;
     for (int i = 0; i < font->glyphCount; ++i)
@@ -1399,7 +1516,8 @@ mrb_value mrb_Font_get_recs(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Font_get_glyphs(mrb_state *mrb, mrb_value self)
 {
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     mrb_value ary = mrb_ary_new(mrb);
     GlyphInfo *glyphs = font->glyphs;
     for (int i = 0; i < font->glyphCount; ++i)
@@ -1415,7 +1533,8 @@ mrb_value mrb_Font_set_baseSize(mrb_state *mrb, mrb_value self)
 {
     mrb_int baseSize;
     mrb_get_args(mrb, "i", &baseSize);
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     font->baseSize = baseSize;
     return mrb_nil_value();
 }
@@ -1424,7 +1543,8 @@ mrb_value mrb_Font_set_glyphCount(mrb_state *mrb, mrb_value self)
 {
     mrb_int glyphCount;
     mrb_get_args(mrb, "i", &glyphCount);
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     font->glyphCount = glyphCount;
     return mrb_nil_value();
 }
@@ -1433,7 +1553,8 @@ mrb_value mrb_Font_set_glyphPadding(mrb_state *mrb, mrb_value self)
 {
     mrb_int glyphPadding;
     mrb_get_args(mrb, "i", &glyphPadding);
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     font->glyphPadding = glyphPadding;
     return mrb_nil_value();
 }
@@ -1442,7 +1563,8 @@ mrb_value mrb_Font_set_texture(mrb_state *mrb, mrb_value self)
 {
     Texture *texture;
     mrb_get_args(mrb, "d", &texture, &Raylib_Texture_type);
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     font->texture = *texture;
     return mrb_nil_value();
 }
@@ -1451,7 +1573,8 @@ mrb_value mrb_Font_set_recs(mrb_state *mrb, mrb_value self)
 {
     mrb_value recs;
     mrb_get_args(mrb, "A", &recs);
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     Rectangle recs_values[font->glyphCount];
     for (int i = 0; i < font->glyphCount; ++i)
     {
@@ -1465,7 +1588,8 @@ mrb_value mrb_Font_set_glyphs(mrb_state *mrb, mrb_value self)
 {
     mrb_value glyphs;
     mrb_get_args(mrb, "A", &glyphs);
-    Font *font = (Font *)DATA_PTR(self);
+    Font *font;
+    Data_Get_Struct(mrb, self, &Raylib_Font_type, font);
     GlyphInfo glyphs_values[font->glyphCount];
     for (int i = 0; i < font->glyphCount; ++i)
     {
@@ -1504,7 +1628,8 @@ mrb_value mrb_Camera_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera_get_position(mrb_state *mrb, mrb_value self)
 {
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     Vector3 *position = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *position = camera->position;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, position));
@@ -1513,7 +1638,8 @@ mrb_value mrb_Camera_get_position(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera_get_target(mrb_state *mrb, mrb_value self)
 {
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     Vector3 *target = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *target = camera->target;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, target));
@@ -1522,7 +1648,8 @@ mrb_value mrb_Camera_get_target(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera_get_up(mrb_state *mrb, mrb_value self)
 {
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     Vector3 *up = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *up = camera->up;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, up));
@@ -1531,13 +1658,15 @@ mrb_value mrb_Camera_get_up(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera_get_fovy(mrb_state *mrb, mrb_value self)
 {
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     return mrb_float_value(mrb, camera->fovy);
 }
 
 mrb_value mrb_Camera_get_projection(mrb_state *mrb, mrb_value self)
 {
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     return mrb_int_value(mrb, camera->projection);
 }
 
@@ -1545,7 +1674,8 @@ mrb_value mrb_Camera_set_position(mrb_state *mrb, mrb_value self)
 {
     Vector3 *position;
     mrb_get_args(mrb, "d", &position, &Raylib_Vector3_type);
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     camera->position = *position;
     return mrb_nil_value();
 }
@@ -1554,7 +1684,8 @@ mrb_value mrb_Camera_set_target(mrb_state *mrb, mrb_value self)
 {
     Vector3 *target;
     mrb_get_args(mrb, "d", &target, &Raylib_Vector3_type);
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     camera->target = *target;
     return mrb_nil_value();
 }
@@ -1563,7 +1694,8 @@ mrb_value mrb_Camera_set_up(mrb_state *mrb, mrb_value self)
 {
     Vector3 *up;
     mrb_get_args(mrb, "d", &up, &Raylib_Vector3_type);
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     camera->up = *up;
     return mrb_nil_value();
 }
@@ -1572,7 +1704,8 @@ mrb_value mrb_Camera_set_fovy(mrb_state *mrb, mrb_value self)
 {
     mrb_float fovy;
     mrb_get_args(mrb, "f", &fovy);
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     camera->fovy = fovy;
     return mrb_nil_value();
 }
@@ -1581,7 +1714,8 @@ mrb_value mrb_Camera_set_projection(mrb_state *mrb, mrb_value self)
 {
     mrb_float projection;
     mrb_get_args(mrb, "i", &projection);
-    Camera *camera = (Camera *)DATA_PTR(self);
+    Camera *camera;
+    Data_Get_Struct(mrb, self, &Raylib_Camera_type, camera);
     camera->projection = projection;
     return mrb_nil_value();
 }
@@ -1613,7 +1747,8 @@ mrb_value mrb_Camera2D_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera2D_get_offset(mrb_state *mrb, mrb_value self)
 {
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     Vector2 *offset = (Vector2 *)mrb_malloc(mrb, sizeof(Vector2));
     *offset = camera2d->offset;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, offset));
@@ -1622,7 +1757,8 @@ mrb_value mrb_Camera2D_get_offset(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera2D_get_target(mrb_state *mrb, mrb_value self)
 {
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     Vector2 *target = (Vector2 *)mrb_malloc(mrb, sizeof(Vector2));
     *target = camera2d->target;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector2_class, &Raylib_Vector2_type, target));
@@ -1631,13 +1767,15 @@ mrb_value mrb_Camera2D_get_target(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Camera2D_get_rotation(mrb_state *mrb, mrb_value self)
 {
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     return mrb_float_value(mrb, camera2d->rotation);
 }
 
 mrb_value mrb_Camera2D_get_zoom(mrb_state *mrb, mrb_value self)
 {
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     return mrb_float_value(mrb, camera2d->zoom);
 }
 
@@ -1645,7 +1783,8 @@ mrb_value mrb_Camera2D_set_offset(mrb_state *mrb, mrb_value self)
 {
     Vector2 *offset;
     mrb_get_args(mrb, "d", &offset, &Raylib_Vector2_type);
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     camera2d->offset = *offset;
     return mrb_nil_value();
 }
@@ -1654,7 +1793,8 @@ mrb_value mrb_Camera2D_set_target(mrb_state *mrb, mrb_value self)
 {
     Vector2 *target;
     mrb_get_args(mrb, "d", &target, &Raylib_Vector2_type);
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     camera2d->target = *target;
     return mrb_nil_value();
 }
@@ -1663,7 +1803,8 @@ mrb_value mrb_Camera2D_set_rotation(mrb_state *mrb, mrb_value self)
 {
     mrb_float rotation;
     mrb_get_args(mrb, "f", &rotation);
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     camera2d->rotation = rotation;
     return mrb_nil_value();
 }
@@ -1672,7 +1813,8 @@ mrb_value mrb_Camera2D_set_zoom(mrb_state *mrb, mrb_value self)
 {
     mrb_float zoom;
     mrb_get_args(mrb, "f", &zoom);
-    Camera2D *camera2d = (Camera2D *)DATA_PTR(self);
+    Camera2D *camera2d;
+    Data_Get_Struct(mrb, self, &Raylib_Camera2D_type, camera2d);
     camera2d->zoom = zoom;
     return mrb_nil_value();
 }
@@ -1700,7 +1842,8 @@ mrb_value mrb_Ray_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Ray_get_position(mrb_state *mrb, mrb_value self)
 {
-    Ray *ray = (Ray *)DATA_PTR(self);
+    Ray *ray;
+    Data_Get_Struct(mrb, self, &Raylib_Ray_type, ray);
     Vector3 *position = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *position = ray->position;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, position));
@@ -1709,7 +1852,8 @@ mrb_value mrb_Ray_get_position(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_Ray_get_direction(mrb_state *mrb, mrb_value self)
 {
-    Ray *ray = (Ray *)DATA_PTR(self);
+    Ray *ray;
+    Data_Get_Struct(mrb, self, &Raylib_Ray_type, ray);
     Vector3 *direction = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *direction = ray->direction;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, direction));
@@ -1720,7 +1864,8 @@ mrb_value mrb_Ray_set_position(mrb_state *mrb, mrb_value self)
 {
     Vector3 *position;
     mrb_get_args(mrb, "d", &position, &Raylib_Vector3_type);
-    Ray *ray = (Ray *)DATA_PTR(self);
+    Ray *ray;
+    Data_Get_Struct(mrb, self, &Raylib_Ray_type, ray);
     ray->position = *position;
     return mrb_nil_value();
 }
@@ -1729,7 +1874,8 @@ mrb_value mrb_Ray_set_direction(mrb_state *mrb, mrb_value self)
 {
     Vector3 *direction;
     mrb_get_args(mrb, "d", &direction, &Raylib_Vector3_type);
-    Ray *ray = (Ray *)DATA_PTR(self);
+    Ray *ray;
+    Data_Get_Struct(mrb, self, &Raylib_Ray_type, ray);
     ray->direction = *direction;
     return mrb_nil_value();
 }
@@ -1761,19 +1907,22 @@ mrb_value mrb_RayCollision_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_RayCollision_get_hit(mrb_state *mrb, mrb_value self)
 {
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     return mrb_bool_value(raycollision->hit);
 }
 
 mrb_value mrb_RayCollision_get_distance(mrb_state *mrb, mrb_value self)
 {
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     return mrb_float_value(mrb, raycollision->distance);
 }
 
 mrb_value mrb_RayCollision_get_point(mrb_state *mrb, mrb_value self)
 {
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     Vector3 *point = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *point = raycollision->point;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, point));
@@ -1782,7 +1931,8 @@ mrb_value mrb_RayCollision_get_point(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_RayCollision_get_normal(mrb_state *mrb, mrb_value self)
 {
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     Vector3 *normal = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *normal = raycollision->normal;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, normal));
@@ -1793,7 +1943,8 @@ mrb_value mrb_RayCollision_set_hit(mrb_state *mrb, mrb_value self)
 {
     mrb_bool hit;
     mrb_get_args(mrb, "b", &hit);
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     raycollision->hit = hit;
     return mrb_nil_value();
 }
@@ -1802,7 +1953,8 @@ mrb_value mrb_RayCollision_set_distance(mrb_state *mrb, mrb_value self)
 {
     mrb_float distance;
     mrb_get_args(mrb, "f", &distance);
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     raycollision->distance = distance;
     return mrb_nil_value();
 }
@@ -1811,7 +1963,8 @@ mrb_value mrb_RayCollision_set_point(mrb_state *mrb, mrb_value self)
 {
     Vector3 *point;
     mrb_get_args(mrb, "d", &point, &Raylib_Vector3_type);
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     raycollision->point = *point;
     return mrb_nil_value();
 }
@@ -1820,7 +1973,8 @@ mrb_value mrb_RayCollision_set_normal(mrb_state *mrb, mrb_value self)
 {
     Vector3 *normal;
     mrb_get_args(mrb, "d", &normal, &Raylib_Vector3_type);
-    RayCollision *raycollision = (RayCollision *)DATA_PTR(self);
+    RayCollision *raycollision;
+    Data_Get_Struct(mrb, self, &Raylib_RayCollision_type, raycollision);
     raycollision->normal = *normal;
     return mrb_nil_value();
 }
@@ -1848,7 +2002,8 @@ mrb_value mrb_BoundingBox_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_BoundingBox_get_min(mrb_state *mrb, mrb_value self)
 {
-    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    BoundingBox *boundingbox;
+    Data_Get_Struct(mrb, self, &Raylib_BoundingBox_type, boundingbox);
     Vector3 *min = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *min = boundingbox->min;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, min));
@@ -1857,7 +2012,8 @@ mrb_value mrb_BoundingBox_get_min(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_BoundingBox_get_max(mrb_state *mrb, mrb_value self)
 {
-    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    BoundingBox *boundingbox;
+    Data_Get_Struct(mrb, self, &Raylib_BoundingBox_type, boundingbox);
     Vector3 *max = (Vector3 *)mrb_malloc(mrb, sizeof(Vector3));
     *max = boundingbox->max;
     mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Vector3_class, &Raylib_Vector3_type, max));
@@ -1868,7 +2024,8 @@ mrb_value mrb_BoundingBox_set_min(mrb_state *mrb, mrb_value self)
 {
     Vector3 *min;
     mrb_get_args(mrb, "d", &min, &Raylib_Vector3_type);
-    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    BoundingBox *boundingbox;
+    Data_Get_Struct(mrb, self, &Raylib_BoundingBox_type, boundingbox);
     boundingbox->min = *min;
     return mrb_nil_value();
 }
@@ -1877,14 +2034,16 @@ mrb_value mrb_BoundingBox_set_max(mrb_state *mrb, mrb_value self)
 {
     Vector3 *max;
     mrb_get_args(mrb, "d", &max, &Raylib_Vector3_type);
-    BoundingBox *boundingbox = (BoundingBox *)DATA_PTR(self);
+    BoundingBox *boundingbox;
+    Data_Get_Struct(mrb, self, &Raylib_BoundingBox_type, boundingbox);
     boundingbox->max = *max;
     return mrb_nil_value();
 }
 
 mrb_value mrb_Music_get_looping(mrb_state *mrb, mrb_value self)
 {
-    Music *music = (Music *)DATA_PTR(self);
+    Music *music;
+    Data_Get_Struct(mrb, self, &Raylib_Music_type, music);
     return mrb_bool_value(music->looping);
 }
 
@@ -1892,7 +2051,8 @@ mrb_value mrb_Music_set_looping(mrb_state *mrb, mrb_value self)
 {
     mrb_bool looping;
     mrb_get_args(mrb, "b", &looping);
-    Music *music = (Music *)DATA_PTR(self);
+    Music *music;
+    Data_Get_Struct(mrb, self, &Raylib_Music_type, music);
     music->looping = looping;
     return mrb_nil_value();
 }
@@ -1914,7 +2074,7 @@ mrb_value mrb_FilePathList_initialize(mrb_state *mrb, mrb_value self)
 
     filepathlist->capacity = capacity;
     filepathlist->count = count;
-    
+
     char *path_values[count];
     for (int i = 0; i < count; ++i)
     {
@@ -1922,26 +2082,28 @@ mrb_value mrb_FilePathList_initialize(mrb_state *mrb, mrb_value self)
     }
     filepathlist->paths = path_values;
 
-
     mrb_data_init(self, filepathlist, &Raylib_FilePathList_type);
     return self;
 }
 
 mrb_value mrb_FilePathList_get_capacity(mrb_state *mrb, mrb_value self)
 {
-    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    FilePathList *filepathlist;
+    Data_Get_Struct(mrb, self, &Raylib_FilePathList_type, filepathlist);
     return mrb_int_value(mrb, filepathlist->capacity);
 }
 
 mrb_value mrb_FilePathList_get_count(mrb_state *mrb, mrb_value self)
 {
-    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    FilePathList *filepathlist;
+    Data_Get_Struct(mrb, self, &Raylib_FilePathList_type, filepathlist);
     return mrb_int_value(mrb, filepathlist->count);
 }
 
 mrb_value mrb_FilePathList_get_paths(mrb_state *mrb, mrb_value self)
 {
-    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    FilePathList *filepathlist;
+    Data_Get_Struct(mrb, self, &Raylib_FilePathList_type, filepathlist);
     mrb_value ary = mrb_ary_new(mrb);
     for (int i = 0; i < filepathlist->count; ++i)
     {
@@ -1954,7 +2116,8 @@ mrb_value mrb_FilePathList_set_capacity(mrb_state *mrb, mrb_value self)
 {
     mrb_int capacity;
     mrb_get_args(mrb, "i", &capacity);
-    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    FilePathList *filepathlist;
+    Data_Get_Struct(mrb, self, &Raylib_FilePathList_type, filepathlist);
     filepathlist->capacity = capacity;
     return mrb_nil_value();
 }
@@ -1963,7 +2126,8 @@ mrb_value mrb_FilePathList_set_count(mrb_state *mrb, mrb_value self)
 {
     mrb_int count;
     mrb_get_args(mrb, "i", &count);
-    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    FilePathList *filepathlist;
+    Data_Get_Struct(mrb, self, &Raylib_FilePathList_type, filepathlist);
     filepathlist->count = count;
     return mrb_nil_value();
 }
@@ -1977,7 +2141,8 @@ mrb_value mrb_FilePathList_set_paths(mrb_state *mrb, mrb_value self)
     {
         path_values[i] = (char *)mrb_string_cstr(mrb, mrb_ary_entry(paths, i));
     }
-    FilePathList *filepathlist = (FilePathList *)DATA_PTR(self);
+    FilePathList *filepathlist;
+    Data_Get_Struct(mrb, self, &Raylib_FilePathList_type, filepathlist);
     filepathlist->paths = path_values;
     return mrb_nil_value();
 }
@@ -1999,14 +2164,13 @@ mrb_value mrb_AutomationEvent_initialize(mrb_state *mrb, mrb_value self)
 
     automationevent->frame = frame;
     automationevent->type = type;
-    
+
     int params_values[4];
     for (int i = 0; i < 4; ++i)
-    { 
+    {
         params_values[i] = mrb_int(mrb, mrb_ary_entry(params, i));
     }
     *automationevent->params = *params_values;
-
 
     mrb_data_init(self, automationevent, &Raylib_AutomationEvent_type);
     return self;
@@ -2014,19 +2178,22 @@ mrb_value mrb_AutomationEvent_initialize(mrb_state *mrb, mrb_value self)
 
 mrb_value mrb_AutomationEvent_get_frame(mrb_state *mrb, mrb_value self)
 {
-    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    AutomationEvent *automationevent;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEvent_type, automationevent);
     return mrb_int_value(mrb, automationevent->frame);
 }
 
 mrb_value mrb_AutomationEvent_get_type(mrb_state *mrb, mrb_value self)
 {
-    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    AutomationEvent *automationevent;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEvent_type, automationevent);
     return mrb_int_value(mrb, automationevent->type);
 }
 
 mrb_value mrb_AutomationEvent_get_params(mrb_state *mrb, mrb_value self)
 {
-    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    AutomationEvent *automationevent;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEvent_type, automationevent);
     mrb_value ary = mrb_ary_new(mrb);
     for (int i = 0; i < 4; ++i)
     {
@@ -2039,7 +2206,8 @@ mrb_value mrb_AutomationEvent_set_frame(mrb_state *mrb, mrb_value self)
 {
     mrb_int frame;
     mrb_get_args(mrb, "i", &frame);
-    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    AutomationEvent *automationevent;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEvent_type, automationevent);
     automationevent->frame = frame;
     return mrb_nil_value();
 }
@@ -2048,7 +2216,8 @@ mrb_value mrb_AutomationEvent_set_type(mrb_state *mrb, mrb_value self)
 {
     mrb_int type;
     mrb_get_args(mrb, "i", &type);
-    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    AutomationEvent *automationevent;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEvent_type, automationevent);
     automationevent->type = type;
     return mrb_nil_value();
 }
@@ -2062,7 +2231,8 @@ mrb_value mrb_AutomationEvent_set_params(mrb_state *mrb, mrb_value self)
     {
         param_values[i] = mrb_int(mrb, mrb_ary_entry(params, i));
     }
-    AutomationEvent *automationevent = (AutomationEvent *)DATA_PTR(self);
+    AutomationEvent *automationevent;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEvent_type, automationevent);
     *automationevent->params = *param_values;
     return mrb_nil_value();
 }
@@ -2084,7 +2254,7 @@ mrb_value mrb_AutomationEventList_initialize(mrb_state *mrb, mrb_value self)
 
     automationeventlist->capacity = capacity;
     automationeventlist->count = count;
-    
+
     AutomationEvent events_values[count];
     for (int i = 0; i < count; ++i)
     {
@@ -2092,26 +2262,28 @@ mrb_value mrb_AutomationEventList_initialize(mrb_state *mrb, mrb_value self)
     }
     automationeventlist->events = events_values;
 
-
     mrb_data_init(self, automationeventlist, &Raylib_AutomationEventList_type);
     return self;
 }
 
 mrb_value mrb_AutomationEventList_get_capacity(mrb_state *mrb, mrb_value self)
 {
-    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    AutomationEventList *automationeventlist;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEventList_type, automationeventlist);
     return mrb_int_value(mrb, automationeventlist->capacity);
 }
 
 mrb_value mrb_AutomationEventList_get_count(mrb_state *mrb, mrb_value self)
 {
-    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    AutomationEventList *automationeventlist;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEventList_type, automationeventlist);
     return mrb_int_value(mrb, automationeventlist->count);
 }
 
 mrb_value mrb_AutomationEventList_get_events(mrb_state *mrb, mrb_value self)
 {
-    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    AutomationEventList *automationeventlist;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEventList_type, automationeventlist);
     mrb_value ary = mrb_ary_new(mrb);
     for (int i = 0; i < automationeventlist->count; ++i)
     {
@@ -2126,7 +2298,8 @@ mrb_value mrb_AutomationEventList_set_capacity(mrb_state *mrb, mrb_value self)
 {
     mrb_int capacity;
     mrb_get_args(mrb, "i", &capacity);
-    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    AutomationEventList *automationeventlist;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEventList_type, automationeventlist);
     automationeventlist->capacity = capacity;
     return mrb_nil_value();
 }
@@ -2135,7 +2308,8 @@ mrb_value mrb_AutomationEventList_set_count(mrb_state *mrb, mrb_value self)
 {
     mrb_int count;
     mrb_get_args(mrb, "i", &count);
-    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    AutomationEventList *automationeventlist;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEventList_type, automationeventlist);
     automationeventlist->count = count;
     return mrb_nil_value();
 }
@@ -2149,7 +2323,8 @@ mrb_value mrb_AutomationEventList_set_events(mrb_state *mrb, mrb_value self)
     {
         event_values[i] = *DATA_GET_PTR(mrb, mrb_ary_entry(events, i), &Raylib_AutomationEvent_type, AutomationEvent);
     }
-    AutomationEventList *automationeventlist = (AutomationEventList *)DATA_PTR(self);
+    AutomationEventList *automationeventlist;
+    Data_Get_Struct(mrb, self, &Raylib_AutomationEventList_type, automationeventlist);
     automationeventlist->events = event_values;
     return mrb_nil_value();
 }

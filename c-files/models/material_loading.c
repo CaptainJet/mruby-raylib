@@ -29,12 +29,12 @@ mrb_value mrb_load_material_default(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsMaterialReady
-mrb_value mrb_is_material_ready(mrb_state *mrb, mrb_value self)
+// IsMaterialValid
+mrb_value mrb_is_material_valid(mrb_state *mrb, mrb_value self)
 {
     Material *material;
     mrb_get_args(mrb, "d", &material, &Raylib_Material_type);
-    return mrb_bool_value(IsMaterialReady(*material));
+    return mrb_bool_value(IsMaterialValid(*material));
 }
 
 // UnloadMaterial
@@ -72,7 +72,7 @@ void mrb_raylib_setup_material_loading(mrb_state *mrb, struct RClass *raylib_mod
 {
     mrb_define_module_function(mrb, raylib_module, "load_materials", mrb_load_materials, MRB_ARGS_REQ(2));
     mrb_define_module_function(mrb, raylib_module, "load_material_default", mrb_load_material_default, MRB_ARGS_NONE());
-    mrb_define_module_function(mrb, raylib_module, "is_material_ready?", mrb_is_material_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_material_valid?", mrb_is_material_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_material", mrb_unload_material, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "set_material_texture", mrb_set_material_texture, MRB_ARGS_REQ(3));
     mrb_define_module_function(mrb, raylib_module, "set_model_mesh_material", mrb_set_model_mesh_material, MRB_ARGS_REQ(3));

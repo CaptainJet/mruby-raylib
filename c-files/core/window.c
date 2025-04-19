@@ -349,6 +349,16 @@ mrb_value mrb_get_clipboard_text(mrb_state *mrb, mrb_value self)
     return mrb_str_new_cstr(mrb, GetClipboardText());
 }
 
+// GetClipboardImage
+mrb_value mrb_get_clipboard_image(mrb_state *mrb, mrb_value self)
+{
+    Image *image = (Image *)malloc(sizeof(Image));
+    *image = GetClipboardImage();
+    mrb_value obj = mrb_obj_value(Data_Wrap_Struct(mrb, Raylib_Image_class, &Raylib_Image_type, image));
+
+    return obj;
+}
+
 // EnableEventWaiting
 mrb_value mrb_enable_event_waiting(mrb_state *mrb, mrb_value self)
 {
@@ -410,6 +420,7 @@ void mrb_raylib_setup_window(mrb_state *mrb, struct RClass *raylib_module)
     mrb_define_module_function(mrb, raylib_module, "get_monitor_name", mrb_get_monitor_name, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "set_clipboard_text", mrb_set_clipboard_text, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "get_clipboard_text", mrb_get_clipboard_text, MRB_ARGS_NONE());
+    mrb_define_module_function(mrb, raylib_module, "get_clipboard_image", mrb_get_clipboard_image, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, raylib_module, "enable_event_waiting", mrb_enable_event_waiting, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, raylib_module, "disable_event_waiting", mrb_disable_event_waiting, MRB_ARGS_NONE());
 }

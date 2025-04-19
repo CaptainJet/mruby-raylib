@@ -28,12 +28,12 @@ mrb_value mrb_load_music_stream_from_memory(mrb_state *mrb, mrb_value self)
     return obj;
 }
 
-// IsMusicReady
-mrb_value mrb_is_music_ready(mrb_state *mrb, mrb_value self)
+// IsMusicValid
+mrb_value mrb_is_music_valid(mrb_state *mrb, mrb_value self)
 {
     Music *music;
     mrb_get_args(mrb, "d", &music, &Raylib_Music_type);
-    return mrb_bool_value(IsMusicReady(*music));
+    return mrb_bool_value(IsMusicValid(*music));
 }
 
 // UnloadMusicStream
@@ -158,7 +158,7 @@ void mrb_raylib_setup_music_management(mrb_state *mrb, struct RClass *raylib_mod
 {
     mrb_define_module_function(mrb, raylib_module, "load_music_stream", mrb_load_music_stream, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "load_music_stream_from_memory", mrb_load_music_stream_from_memory, MRB_ARGS_REQ(3));
-    mrb_define_module_function(mrb, raylib_module, "is_music_ready?", mrb_is_music_ready, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, raylib_module, "is_music_valid?", mrb_is_music_valid, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "unload_music_stream", mrb_unload_music_stream, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "play_music_stream", mrb_play_music_stream, MRB_ARGS_REQ(1));
     mrb_define_module_function(mrb, raylib_module, "is_music_stream_playing?", mrb_is_music_stream_playing, MRB_ARGS_REQ(1));
